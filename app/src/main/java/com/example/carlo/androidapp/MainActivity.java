@@ -53,9 +53,9 @@ public class MainActivity extends AppCompatActivity {
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
-                        String email = "email";
+
                         textview.setText(loginResult.getAccessToken().getToken());
-                        GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                        /*GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
                                 try {
@@ -65,8 +65,7 @@ public class MainActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                             }
-                        });
-                        textview.setText(email);
+                        })*/
 
 
                     }
