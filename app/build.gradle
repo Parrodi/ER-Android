@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 
-
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -17,6 +16,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    allprojects {
+        repositories {
+            google()
+        }
+    }
 }
 
 dependencies {
@@ -27,5 +31,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.facebook.android:facebook-login:4.37.0'
+    implementation 'com.google.android.gms:play-services-auth:16.0.1'
 
 }
