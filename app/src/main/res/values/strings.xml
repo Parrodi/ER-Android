@@ -13,5 +13,20 @@
     <string name="google">google</string>
     <string name="iniciar_con">Iniciar con:</string>
     <string name="logo">Logotipo ER</string>
-
+    <string name="registrarse">\nRegistrarse\n</string>
+    <string name="forma_sencilla">         Una forma sencilla y rápida\n</string>
+    <string name="iniciar_con_facebook">Iniciar con Facebook</string>
+    <string name="iniciar_con_twitter">Iniciar con Twitter</string>
+    <string name="iniciar_con_google">Iniciar con Google</string>
+    <string name="info_registro">No te preocupes, no haremos publicaciones \na tu nombre en tus perfiles de redes sociales</string>
+    <string name="saber_quien_eres">QUEREMOS SABER QUIEN ERES</string>
+    <string name="nombre_completo_pregunta">¿Cuál es tu nombre completo?*</string>
+    <string name="escribe">Escribe…</string>
+    <string name="e_mail">Email*</string>
+    <string name="numero_telefonico">Número de teléfono*</string>
+    <string name="elige_contra">Elige una contraseña*</string>
+    <string name="confirma_contra">Confirma tu contraseña*</string>
+    <string name="campos_obligatorios">* Todos los campos son obligatorios</string>
+    <string name="aceptar_terminos">Acepto los Términos y Condiciones de Uso</string>
+    <string name="registr_m">REGISTRARSE</string>
 </resources>
