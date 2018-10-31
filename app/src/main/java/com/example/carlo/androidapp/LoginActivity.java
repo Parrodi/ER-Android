@@ -41,12 +41,9 @@ import java.util.Map;
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private GoogleApiClient googleApiClient;
+    private static final int SIGN_IN_CODE = 777;
 
-    private SignInButton signInButton;
-
-    public static final int SIGN_IN_CODE = 777;
-
-    TextView textview;
+    TextView textview, registro;
     EditText em, psw;
     CallbackManager callbackManager;
     Button fbbutton, googlebutton, iniciarsesion;
@@ -66,6 +63,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         iniciarsesion = (Button)findViewById(R.id.iniciarSesion);
         em = (EditText)findViewById(R.id.editTextEmail);
         psw = (EditText)findViewById(R.id.editTextPwd);
+        registro = (TextView)findViewById(R.id.textViewANR);
+        registro.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v){
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+            }
+        });
         callbackManager = CallbackManager.Factory.create();
 
         LoginManager.getInstance().registerCallback(callbackManager,
