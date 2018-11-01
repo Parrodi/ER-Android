@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -37,6 +38,7 @@ import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -46,7 +48,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     TextView textview, registro;
     EditText em, psw;
     CallbackManager callbackManager;
-    Button fbbutton, googlebutton, iniciarsesion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +58,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         setContentView(R.layout.activity_login);
 
-        textview = (TextView)findViewById(R.id.textViewOC);
-        fbbutton = (Button)findViewById(R.id.facebookButton);
-        googlebutton = (Button)findViewById(R.id.googleButton);
-        iniciarsesion = (Button)findViewById(R.id.iniciarSesion);
         em = (EditText)findViewById(R.id.editTextEmail);
         psw = (EditText)findViewById(R.id.editTextPwd);
         registro = (TextView)findViewById(R.id.textViewANR);
@@ -78,17 +75,20 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     @Override
                     public void onSuccess(LoginResult loginResult) {
 
-                        textview.setText(loginResult.getAccessToken().getToken());
+                        Toast.makeText(LoginActivity.this, loginResult.getAccessToken().getUserId(),
+                                Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onCancel() {
-                        textview.setText("Cancel Fb");
+                        Toast.makeText(LoginActivity.this, "FacebookCancel",
+                                Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
-                        textview.setText("Error Fb");
+                        Toast.makeText(LoginActivity.this, "Facebook Error",
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -107,6 +107,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         @Override
         protected String doInBackground(String... strings) {
             StringBuffer response = new StringBuffer();
+            textview = (TextView)findViewById(R.id.textViewOC);
             try{
                 URL url = new URL(strings[0]);
                 HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -129,13 +130,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                 int responseCode = conn.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK){
-                    textview.setText("Se pudo login normal");
+                    textview.setText("Usuario Valido");
                     String line;
                     BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                     while((line = br.readLine()) != null){
                         response.append(line);
                     }
-                }else textview.setText("No se pudo login normal");
+                }else textview.setText("Usuario Invalido");
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -183,9 +184,15 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void handleSignInResult(GoogleSignInResult result) {
         if(result.isSuccess()){
-            textview.setText("Se pudo Google");
+            /*Toast.makeText(LoginActivity.this, result.getSignInAccount().getEmail(),
+                    Toast.LENGTH_SHORT).show();*/
+
+
+            Toast.makeText(LoginActivity.this, "Google Success!",
+                    Toast.LENGTH_SHORT).show();
         }else{
-            textview.setText("No se pudo Google");
+            Toast.makeText(LoginActivity.this, "Google Fail",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
