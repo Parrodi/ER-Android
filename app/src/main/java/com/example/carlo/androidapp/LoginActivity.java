@@ -102,75 +102,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .build();
 
     }
-    private class  BasicLoginManager extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... strings) {
-            StringBuffer response = new StringBuffer();
-            textview = (TextView)findViewById(R.id.textViewOC);
-            try{
-                URL url = new URL(strings[0]);
-                HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-                conn.setReadTimeout(15000);
-                conn.setConnectTimeout(15000);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-
-                HashMap<String, String> postParams = new HashMap<>();
-                postParams.put("email", strings[1]);
-                postParams.put("password", strings[2]);
-
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-                writer.write(getPostString(postParams));
-                writer.flush();
-                writer.close();
-                os.close();
-
-                int responseCode = conn.getResponseCode();
-                if (responseCode == HttpURLConnection.HTTP_OK){
-                    textview.setText("Usuario Valido");
-                    String line;
-                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    while((line = br.readLine()) != null){
-                        response.append(line);
-                    }
-                }else textview.setText("Usuario Invalido");
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-
-            return response.toString();
-        }
 
 
-        private String getPostString(HashMap<String, String> params)throws UnsupportedEncodingException {
-
-            StringBuffer sb = new StringBuffer();
-            boolean first = true;
-            for(Map.Entry<String, String> entry: params.entrySet()){
-                if(first)
-                    first = false;
-                else
-                    sb.append("&");
-                sb.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
-                sb.append("=");
-                sb.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-
-            }
-            return sb.toString();
-
-        }
-
-    }
-
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
+    // Manages the results from FB and Google connections
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -182,6 +116,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     }
 
+    //Manages the result of the Google connection
     private void handleSignInResult(GoogleSignInResult result) {
         if(result.isSuccess()){
             /*Toast.makeText(LoginActivity.this, result.getSignInAccount().getEmail(),
@@ -196,6 +131,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
     }
 
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+
+    //Calls the method to begin a connection with FB
     public void fbLogin(View v){
         LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile"));
     }
@@ -203,7 +145,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(intent, SIGN_IN_CODE);
     }
+    //Calls the method BasicLoginManager
     public void doBasicLogin(View v){
-        new BasicLoginManager().execute("http://ertourister.appspot.com/user/login", em.getText().toString(), psw.getText().toString());
+        apiConnect connect = new apiConnect();
+        String response = connect.basicLogin("ertourister.appspot.com/user/login", em.getText().toString(), psw.getText().toString());
+        textview.setText(response);
     }
 }
