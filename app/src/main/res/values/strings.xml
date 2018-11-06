@@ -13,5 +13,6 @@
     <string name="google">google</string>
     <string name="iniciar_con">Iniciar con:</string>
     <string name="logo">Logotipo ER</string>
-
+    <string name="title_activity_maps">Map</string>
+    <string name="API_KEY">AIzaSyAKAVsEPYZebHtQG36Bp_Vb3nYLRno5eXM</string>
 </resources>
