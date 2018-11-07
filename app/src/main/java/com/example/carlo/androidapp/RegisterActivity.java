@@ -211,12 +211,6 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         startActivityForResult(intent, SIGN_IN_CODE);
     }
 
-
-
-
-
-
-
     public void registro(View v){
         boolean correctinput=true;
         String message;
