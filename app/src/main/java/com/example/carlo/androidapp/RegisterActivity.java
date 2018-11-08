@@ -19,6 +19,8 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
@@ -27,6 +29,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -44,6 +49,7 @@ import java.util.Map;
 public class RegisterActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
     private static final int SIGN_IN_CODE = 777;
     private GoogleApiClient googleApiClient;
+    public String answer;
     Button fb, gg;
     EditText name, email, phone, pswd, pswdc;
     TextView em, nom, tel, psw1, psw2, CO;
@@ -76,8 +82,26 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                     @Override
                     public void onSuccess(LoginResult loginResult) {
 
-                        Toast.makeText(RegisterActivity.this, loginResult.getAccessToken().getUserId(),
-                                Toast.LENGTH_SHORT).show();
+                        GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                try {
+                                    String email = object.getString("email");
+                                    String name = object.getString("name");
+                                    String password = object.getString("id");
+                                    new RegisterActivity.RegisterUserManager().execute("http://ertourister.appspot.com/user/add", name, email, password);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    Toast.makeText(RegisterActivity.this, "no se pudieron los datos de fb",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                        });
+                        Bundle parameters = new Bundle();
+                        parameters.putString("fields", "id,name,email");
+                        request.setParameters(parameters);
+                        request.executeAsync();
                     }
 
                     @Override
@@ -152,8 +176,9 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                 HashMap<String, String> postParams = new HashMap<>();
                 postParams.put("name", strings[1]);
                 postParams.put("email", strings[2]);
-                postParams.put("phone number", strings[3]);
-                postParams.put("password", strings[4]);
+                postParams.put("password", strings[3]);
+
+
 
                 OutputStream os = conn.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
@@ -164,13 +189,12 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
                 int responseCode = conn.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK){
-                    CO.setText("SE CREO USUARIO DE MANERA CORRECTA!");
                     String line;
                     BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                     while((line = br.readLine()) != null){
                         response.append(line);
                     }
-                }else CO.setText("USUARIO INVALIDO O ERROR DE SERVIDOR");
+                }
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -197,6 +221,18 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
         }
 
+        protected void onPostExecute(String response){
+            try {
+                JSONObject jsonresponse = new JSONObject(response);
+                answer= jsonresponse.getString("info");
+            } catch (JSONException e) {
+                e.printStackTrace();
+                answer = "fail";
+            }
+
+            CO.setText(answer);
+        }
+
     }
 
 
@@ -210,6 +246,12 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(intent, SIGN_IN_CODE);
     }
+
+
+
+
+
+
 
     public void registro(View v){
         boolean correctinput=true;
@@ -260,23 +302,13 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
        if (correctinput){
            message = "Input Válido y Completo!";
-           new RegisterUserManager().execute("http://ertourister.appspot.com/user/add", name.getText().toString(), email.getText().toString(), phone.getText().toString(), pswd.getText().toString());
+           new RegisterUserManager().execute("http://ertourister.appspot.com/user/add", name.getText().toString(), email.getText().toString(),pswd.getText().toString(), phone.getText().toString());
        } else message = "Input Inválido o Incompleto!";
 
         Toast.makeText(RegisterActivity.this, message,
                 Toast.LENGTH_SHORT).show();
     }
 
-    /*private static String depureNumber(String phone){
-        int size = 0;
-        StringBuilder newPhone = new StringBuilder();
-        while(phone.length() > size){
-            if(phone.charAt(size) > 48 && phone.charAt(size) < 58)
-                newPhone.append(phone.charAt(size));
-            size++;
-        }
-        return newPhone.toString();
-    }*/
 
 }
 

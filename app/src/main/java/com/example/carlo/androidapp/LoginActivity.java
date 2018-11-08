@@ -1,6 +1,7 @@
 package com.example.carlo.androidapp;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,6 +20,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.Login;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.Auth;
@@ -80,8 +82,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         });
         callbackManager = CallbackManager.Factory.create();
 
-        LoginManager.getInstance().registerCallback(callbackManager,
-                new FacebookCallback<LoginResult>() {
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
@@ -94,7 +95,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                     new AddManager().execute("http://ertourister.appspot.com/user/add", name, email, password);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
-                                    textview.setText("no se pudieron obtener los datos de FB");
+                                    Toast.makeText(LoginActivity.this, "Failed to get parameters from FB",
+                                            Toast.LENGTH_LONG).show();
                                 }
 
                             }
@@ -107,13 +109,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                     @Override
                     public void onCancel() {
-
-                        textview.setText("Facebook Cancel");
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
-                       textview.setText("Facebook Error");
+                        Toast.makeText(LoginActivity.this, "Facebook Error",
+                                Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -125,6 +126,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API)
                 .build();
+
 
     }
 
@@ -270,9 +272,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 answer= jsonresponse.getString("info");
             } catch (JSONException e) {
                 e.printStackTrace();
-                answer = "fail to add";
+                answer = "Failed to get parameter info";
             }
-
+            if(answer.equals("Email already in use"))
+                answer = "User is registered in the database";
             textview.setText(answer);
         }
 
@@ -296,16 +299,18 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     //Manages the result of the Google connection
     private void handleSignInResult(GoogleSignInResult result) {
         if(result.isSuccess()){
-            /*Toast.makeText(LoginActivity.this, result.getSignInAccount().getEmail(),
-                    Toast.LENGTH_SHORT).show();*/
+           GoogleSignInAccount acct = result.getSignInAccount();
+            String name = acct.getDisplayName();
+            //String name = acct.getGivenName();
+            //String name = acct.getFamilyName();
+            String email = acct.getEmail();
+            String personId = acct.getId();
+            textview.setText(personId);
+            //new AddManager().execute("http://ertourister.appspot.com/user/add", name, email, personId);
 
 
-            Toast.makeText(LoginActivity.this, "Google Success!",
-                    Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(LoginActivity.this, "Google Fail",
-                    Toast.LENGTH_SHORT).show();
-        }
+        }else Toast.makeText(LoginActivity.this, "Sign in failed Google",
+                Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -321,6 +326,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public void gLogin(View v){
         Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(intent, SIGN_IN_CODE);
+
     }
     //Calls the method BasicLoginManager
     public void doBasicLogin(View v){

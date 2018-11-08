@@ -20,7 +20,6 @@ public class inputFormatAuthentication {
             if(name.charAt(size) == 32){
                 if(name.charAt(size+1) == 32)
                     return false;
-                else size++;
             }else if(name.charAt(size) > 64 && name.charAt(size) < 123){
                 size++;
             }else return false;
