@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="00dp"
+    tools:context=".RegisterActivity">
+
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewchangeData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mis Datos"
+                android:textAlignment="center"
+                android:textColor="#EB1676"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textViewnom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:drawableStart="@drawable/flechapregunta"
+                android:paddingStart="37dp"
+                android:text="Nombre"
+                android:textColor="#707070"
+                android:textStyle="bold"
+                tools:ignore="RtlSymmetry" />
+
+            <EditText
+                android:id="@+id/nombreCompleto"
+                android:layout_width="347dp"
+                android:layout_height="40dp"
+                android:ems="10"
+                android:hint="Escribe..."
+                android:inputType="textPersonName"
+                android:textSize="12sp"
+                tools:ignore="Autofill,LabelFor" />
+
+            <TextView
+                android:id="@+id/textViewem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:drawableStart="@drawable/flechapregunta"
+                android:paddingStart="37dp"
+                android:text="Email"
+                android:textColor="#707070"
+                android:textStyle="bold"
+                tools:ignore="RtlSymmetry" />
+
+            <EditText
+                android:id="@+id/correoElectrónico"
+                android:layout_width="347dp"
+                android:layout_height="40dp"
+                android:ems="10"
+                android:hint="Escribe..."
+                android:inputType="textEmailAddress"
+                android:textSize="12sp"
+                tools:ignore="Autofill,LabelFor" />
+
+            <TextView
+                android:id="@+id/textViewtel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:drawableStart="@drawable/flechapregunta"
+                android:paddingStart="37dp"
+                android:text="Teléfono"
+                android:textColor="#707070"
+                android:textStyle="bold"
+                tools:ignore="RtlSymmetry" />
+
+            <EditText
+                android:id="@+id/numeroTelefono"
+                android:layout_width="347dp"
+                android:layout_height="40dp"
+                android:ems="10"
+                android:hint="Escribe..."
+                android:inputType="phone"
+                android:maxLength="10"
+                android:textSize="12sp"
+                tools:ignore="Autofill,LabelFor" />
+
+            <TextView
+                android:id="@+id/textViewpsw1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:drawableStart="@drawable/flechapregunta"
+                android:paddingStart="37dp"
+                android:text="Tiempo Restante de Pulsera"
+                android:textColor="#707070"
+                android:textStyle="bold"
+                tools:ignore="RtlSymmetry" />
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="347dp"
+                android:layout_height="40dp"
+                android:ems="10"
+                android:hint="Escribe..."
+                android:inputType="textPassword"
+                android:textSize="12sp"
+                tools:ignore="Autofill,LabelFor" />
+
+            <Button
+                android:id="@+id/GuardarCambios"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#EB1676"
+                android:onClick="registro"
+                android:text="Guardar Cambios"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                tools:layout_editor_absoluteY="336dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</android.support.constraint.ConstraintLayout>

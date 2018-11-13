@@ -305,7 +305,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             //String name = acct.getFamilyName();
             String email = acct.getEmail();
             String personId = acct.getId();
-            textview.setText(personId);
+            textview.setText(name);
             //new AddManager().execute("http://ertourister.appspot.com/user/add", name, email, personId);
 
 
