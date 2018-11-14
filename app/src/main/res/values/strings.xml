@@ -24,9 +24,12 @@
     <string name="escribe">Escribe…</string>
     <string name="e_mail">Email*</string>
     <string name="numero_telefonico">Número de teléfono</string>
-    <string name="elige_contra">Elige una contraseña*</string>
+    <string name="elige_contra">Elige una contraseña*(Min. 6 caracteres)</string>
     <string name="confirma_contra">Confirma tu contraseña*</string>
     <string name="campos_obligatorios">* Campos obligatorios</string>
     <string name="aceptar_terminos">Acepto los Términos y Condiciones de Uso</string>
     <string name="registr_m">REGISTRARSE</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="API_KEY">AIzaSyAKAVsEPYZebHtQG36Bp_Vb3nYLRno5eXM</string>
+    <string name="compra_tus_boletos">COMPRA TUS BOLETOS</string>
 </resources>
