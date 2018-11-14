@@ -6,18 +6,18 @@ public class Place {
 
     private String name;
     private String description;
-    private int locationId;
     private int placeTypeId;
     private double latitude;
     private double longitude;
     private String narrativeUrl;
     private Tour[] tours;
 
-    public Place(String name, String description, int locationId, int placeTypeId) {
+    public Place(String name, String description, int placeTypeId, double latitude, double longitude) {
         this.name = name;
         this.description = description;
-        this.locationId = locationId;
         this.placeTypeId = placeTypeId;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getName() {
@@ -36,19 +36,43 @@ public class Place {
         this.description = description;
     }
 
-    public int getLocationId() {
-        return locationId;
-    }
-
-    public void setLocationId(int locationId) {
-        this.locationId = locationId;
-    }
-
     public int getPlaceTypeId() {
         return placeTypeId;
     }
 
     public void setPlaceTypeId(int placeTypeId) {
         this.placeTypeId = placeTypeId;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getNarrativeUrl() {
+        return narrativeUrl;
+    }
+
+    public void setNarrativeUrl(String narrativeUrl) {
+        this.narrativeUrl = narrativeUrl;
+    }
+
+    public Tour[] getTours() {
+        return tours;
+    }
+
+    public void setTours(Tour[] tours) {
+        this.tours = tours;
     }
 }

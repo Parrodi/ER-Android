@@ -53,11 +53,11 @@ public class ViewPagerAdapter extends PagerAdapter {
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.custom_layout, null);
         ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
-        TextView textView = (TextView) view.findViewById(R.id.nombreDelTour);
+        //TextView textView = (TextView) view.findViewById(R.id.nombreDelTour);
 
         final Tour recorrido = tours.get(position);
 
-        textView.setText(recorrido.getName());
+        //textView.setText(recorrido.getName());
 
         URL url = recorrido.getImage();
 
@@ -65,8 +65,8 @@ public class ViewPagerAdapter extends PagerAdapter {
         ViewPager vp =(ViewPager) container;
         vp.addView(view, 0);
 
-        Button boton = (Button) view.findViewById(R.id.comprarTour);
-        boton.setOnClickListener(new View.OnClickListener(){
+        //Button boton = (Button) view.findViewById(R.id.comprarTour);
+        imageView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
 
@@ -87,5 +87,6 @@ public class ViewPagerAdapter extends PagerAdapter {
         ViewPager vp = (ViewPager) container;
         View view = (View) object;
         vp.removeView(view);
+
     }
 }
