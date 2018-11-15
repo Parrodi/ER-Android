@@ -18,6 +18,8 @@ import com.example.carlo.androidapp.R;
 import com.example.carlo.androidapp.actividades.MapsActivity;
 import com.example.carlo.androidapp.actividades.TourDescriptionActivity;
 import com.example.carlo.androidapp.modelos.Tour;
+import com.example.carlo.androidapp.actividades.TourDescriptionActivity;
+import com.example.carlo.androidapp.modelos.Tour;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -53,11 +55,11 @@ public class ViewPagerAdapter extends PagerAdapter {
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.custom_layout, null);
         ImageView imageView = (ImageView) view.findViewById(R.id.imageView);
-        //TextView textView = (TextView) view.findViewById(R.id.nombreDelTour);
+        TextView textView = (TextView) view.findViewById(R.id.nombreDelTour);
 
         final Tour recorrido = tours.get(position);
 
-        //textView.setText(recorrido.getName());
+        textView.setText("");
 
         URL url = recorrido.getImage();
 

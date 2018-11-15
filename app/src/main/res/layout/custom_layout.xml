@@ -33,10 +33,9 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="33dp"
             android:layout_marginBottom="68dp"
-            android:text=""
+            android:text="Puebla de noche"
             android:textColor="#fff"
             android:textStyle="bold" />
-
 
 
     </RelativeLayout>

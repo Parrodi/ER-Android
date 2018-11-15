@@ -14,12 +14,12 @@ public class Tour {
 
     }
 
-    public Tour(int id, String name, URL image, String description, Place[] places) {
+    public Tour(int id, String name, URL image, String description/*, Place[] places*/) {
         this.id = id;
         this.name = name;
         this.image = image;
         this.description = description;
-        this.places = places;
+        //this.places = places;
     }
 
     public int getId() {

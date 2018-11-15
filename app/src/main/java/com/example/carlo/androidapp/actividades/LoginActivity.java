@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -48,7 +49,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private GoogleApiClient googleApiClient;
     private static final int SIGN_IN_CODE = 777;
-    public String answer;
+    private String answer, useremail;
 
     TextView textview, registro;
     EditText em, psw;
@@ -85,6 +86,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         try {
                             String email = object.getString("email");
+                            useremail = email;
                             String name = object.getString("name");
                             String password = object.getString("id");
                             new AddManager().execute("http://ertourister.appspot.com/user/add", name, email, password);
@@ -145,6 +147,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 postParams.put("email", strings[1]);
                 postParams.put("password", strings[2]);
 
+
                 OutputStream os = conn.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
                 writer.write(getPostString(postParams));
@@ -192,10 +195,23 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 answer= jsonresponse.getString("info");
             } catch (JSONException e) {
                 e.printStackTrace();
-                answer = "fail";
+                answer = "Login Failed";
+            }
+            if(answer.equals("Login success")){
+                try {
+                    JSONObject jsonresponse = new JSONObject(response);
+
+                    Intent i = new Intent(LoginActivity.this, MapsActivity.class);
+                    i.putExtra("userid",jsonresponse.getInt("id") );
+                    startActivity(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
             }
 
-            textview.setText(answer);
+            Toast.makeText(LoginActivity.this, answer,
+                    Toast.LENGTH_LONG).show();
         }
 
     }
@@ -227,16 +243,20 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 writer.close();
                 os.close();
 
-                int responseCode = conn.getResponseCode();
-                if (responseCode == HttpURLConnection.HTTP_OK){
-                    String line;
-                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    while((line = br.readLine()) != null){
-                        response.append(line);
-                    }
+                //int responseCode = conn.getResponseCode();
+                //if (responseCode == HttpURLConnection.HTTP_OK){
+                Log.d("Error500", "entro while");
+                String line;
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while((line = br.readLine()) != null){
+                    response.append(line);
+                    Log.d("Error500", "estoy en while");
                 }
+                Log.d("Error500", "salgo while");
+                //}
             }catch (Exception e){
                 e.printStackTrace();
+                Log.d("Error500", "entro al exception");
             }
 
             return response.toString();
@@ -262,16 +282,22 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
 
         protected void onPostExecute(String response){
+            Log.d("Error500", "Hola");
             try {
                 JSONObject jsonresponse = new JSONObject(response);
                 answer= jsonresponse.getString("info");
             } catch (JSONException e) {
                 e.printStackTrace();
-                answer = "Failed to get parameter info";
+                answer = "Failed to get response info";
             }
-            if(answer.equals("Email already in use"))
-                answer = "User is registered in the database";
-            textview.setText(answer);
+            if(answer.equals("Email already in use")){
+                answer = "Login Success";
+                Intent i = new Intent(LoginActivity.this, MapsActivity.class);
+                startActivity(i);
+            }
+            Toast.makeText(LoginActivity.this, answer,
+                    Toast.LENGTH_LONG).show();
+
         }
 
     }
@@ -294,17 +320,19 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     //Manages the result of the Google connection
     private void handleSignInResult(GoogleSignInResult result) {
         if(result.isSuccess()){
-            GoogleSignInAccount acct = result.getSignInAccount();
-            String name = acct.getDisplayName();
+            //GoogleSignInAccount acct = result.getSignInAccount();
+            //String name = acct.getDisplayName();
             //String name = acct.getGivenName();
             //String name = acct.getFamilyName();
-            String email = acct.getEmail();
-            String personId = acct.getId();
-            textview.setText(name);
+            //String email = acct.getEmail();
+            //String personId = acct.getId();
+            // textview.setText(name);
             //new AddManager().execute("http://ertourister.appspot.com/user/add", name, email, personId);
+            Intent i = new Intent(LoginActivity.this, MapsActivity.class);
+            startActivity(i);
 
 
-        }else Toast.makeText(LoginActivity.this, "Sign in failed Google",
+        }else Toast.makeText(LoginActivity.this, "Failed sign in Google",
                 Toast.LENGTH_LONG).show();
     }
 
@@ -328,4 +356,30 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         new BasicLoginManager().execute("http://ertourister.appspot.com/user/login", em.getText().toString(), psw.getText().toString());
 
     }
+
+    /*private void sendRequest(){
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url ="http://ertourister.appspot.com/user?email="+useremail;
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject json = new JSONObject(response);
+                            int userid = json.getInt("id");
+                            textview.setText(userid);
+                        } catch (JSONException e) {
+                            textview.setText("fallo get request");
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        queue.add(stringRequest);
+    }*/
+
+
 }

@@ -1,5 +1,6 @@
 package com.example.carlo.androidapp.actividades;
 
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -26,14 +27,5 @@ public class TourDescriptionActivity extends AppCompatActivity {
         descripcion_tour.setText(description);
         nombre_tour.setText(name);
         Picasso.with(this).load(image_url).into(image_tour);
-    }
-
-    public static class RegisterActivity extends AppCompatActivity {
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_register);
-        }
     }
 }
