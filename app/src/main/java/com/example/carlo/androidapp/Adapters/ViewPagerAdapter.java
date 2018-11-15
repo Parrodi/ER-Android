@@ -2,26 +2,20 @@ package com.example.carlo.androidapp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.carlo.androidapp.R;
-import com.example.carlo.androidapp.Activities.MapsActivity;
 import com.example.carlo.androidapp.Activities.TourDescriptionActivity;
 import com.example.carlo.androidapp.Models.Tour;
+import com.example.carlo.androidapp.R;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
@@ -57,7 +51,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
         final Tour recorrido = tours.get(position);
 
-        textView.setText(recorrido.getName());
+        textView.setText("");
 
         URL url = recorrido.getImage();
 
@@ -65,8 +59,8 @@ public class ViewPagerAdapter extends PagerAdapter {
         ViewPager vp =(ViewPager) container;
         vp.addView(view, 0);
 
-        Button boton = (Button) view.findViewById(R.id.comprarTour);
-        boton.setOnClickListener(new View.OnClickListener(){
+        //Button boton = (Button) view.findViewById(R.id.comprarTour);
+        imageView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
 

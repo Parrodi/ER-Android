@@ -37,19 +37,6 @@
             android:textColor="#fff"
             android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/comprarTour"
-            android:layout_width="155dp"
-            android:layout_height="37dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="54dp"
-            android:background="@drawable/boton_comprar_tour"
-            android:backgroundTint="#fff"
-            android:text="@string/compra_tus_boletos"
-            android:textColor="#fff"
-            android:textSize="12sp"
-            android:textStyle="bold" />
 
     </RelativeLayout>
 

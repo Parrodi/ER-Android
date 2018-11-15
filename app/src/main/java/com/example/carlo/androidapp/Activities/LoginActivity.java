@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -243,14 +244,18 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                 //int responseCode = conn.getResponseCode();
                 //if (responseCode == HttpURLConnection.HTTP_OK){
+                Log.d("Error500", "entro while");
                     String line;
                     BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                     while((line = br.readLine()) != null){
                         response.append(line);
+                        Log.d("Error500", "estoy en while");
                     }
+                Log.d("Error500", "salgo while");
                 //}
             }catch (Exception e){
                 e.printStackTrace();
+                Log.d("Error500", "entro al exception");
             }
 
             return response.toString();
@@ -276,6 +281,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
 
         protected void onPostExecute(String response){
+            Log.d("Error500", "Hola");
             try {
                 JSONObject jsonresponse = new JSONObject(response);
                 answer= jsonresponse.getString("info");
