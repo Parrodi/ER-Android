@@ -1,8 +1,9 @@
 package com.example.carlo.androidapp.modelos;
 
+import java.io.Serializable;
 import java.net.URL;
 
-public class Tour {
+public class Tour implements Serializable {
 
     private int id;
     private String name;
@@ -14,12 +15,12 @@ public class Tour {
 
     }
 
-    public Tour(int id, String name, URL image, String description/*, Place[] places*/) {
+    public Tour(int id, String name, URL image, String description, Place[] places) {
         this.id = id;
         this.name = name;
         this.image = image;
         this.description = description;
-        //this.places = places;
+        this.places = places;
     }
 
     public int getId() {

@@ -48,7 +48,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, ViewPager.OnPageChangeListener {
 
     public static final String TAG = "MapActivity";
 
@@ -77,6 +77,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     String PATH_TO_PLACE_TYPE =  "placetype";
     String PATH_TO_PLACES =  "places";
     private List<Tour> listaDeTours;
+    private List<Place> listaDePlaces;
 
     ViewPager viewPager;
 
@@ -85,56 +86,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         listaDeTours = new ArrayList<>();
+        listaDePlaces = new ArrayList<>();
         getLocationPermission();
 
-        //mMap.setPadding(0, 0, 300, 0);
+        //mSearchText = (EditText) findViewById(R.id.input_search);
 
-        mSearchText = (EditText) findViewById(R.id.input_search);
-
-        init();
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         sendRequest();
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        /*SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);*/
     }
 
-    private void init(){
-        Log.d(TAG, "init: initializing");
-
-        mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent keyEvent) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE || keyEvent.getAction() == KeyEvent.ACTION_DOWN || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
-                    geoLocate();
-                }
-                return false;
-            }
-        });
-
-
-    }
-
-    private void geoLocate(){
-        String searchString = mSearchText.getText().toString();
-
-        Geocoder geocoder = new Geocoder(MapsActivity.this);
-        List<Address> list = new ArrayList<>();
-        try{
-            list = geocoder.getFromLocationName(searchString, 1);
-        }catch(IOException e){
-            Log.e(TAG, "geoLocate: IOException: " + e.getMessage());
-        }
-
-        if(list.size() > 0){
-            Address address = list.get(0);
-
-            Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
-        }
-    }
 
     /**
      * Manipulates the map once available.
@@ -221,8 +183,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-
-
         if (mLocationPermissionGranted) {
             getDeviceLocation();
 
@@ -231,7 +191,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
-            init();
         }
     }
 
@@ -248,16 +207,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     try {
                         jsonObject = response.getJSONObject(i);
-                        //location = new LocationCT(jsonObject.getDouble("latitude"), jsonObject.getDouble("longitude"));
                         String url = jsonObject.getString("image");
-                        /*Tour tour = new Tour(jsonObject.getInt("id"), jsonObject.getString("name"), new URL(url), jsonObject.getString("description"));
-                        /*tour.setId(jsonObject.getInt("id"));
-                        tour.setDescription(jsonObject.getString("description"));
-                        tour.setImage(new URL(url));
-                        tour.setName(jsonObject.getString("name"));
-                        //tour.setPlaces((Place[]) jsonObject.get( "places"));*/
+
+                        JSONArray jsonArrayPlace = jsonObject.getJSONArray("places");
+                        for(int j = 0; j < jsonArrayPlace.length(); j++){
+                            JSONObject jsonObjectPlaces = jsonArrayPlace.getJSONObject(j);
+
+                            String name = jsonObjectPlaces.getString("name");
+                            String description = jsonObjectPlaces.getString("description");
+                            int placeType = jsonObjectPlaces.getInt("place_type_id");
+                            double latitude = jsonObjectPlaces.getDouble("latitude");
+                            double longitude = jsonObjectPlaces.getDouble("longitude");
+
+                            Place lugar = new Place(name, description, placeType, latitude, longitude);
+                            listaDePlaces.add(lugar);
+
+                        }
+
+                        Place lugares[] = new Place[listaDePlaces.size()];
+                        lugares = listaDePlaces.toArray(lugares);
+
                         listaDeTours.add(new Tour(jsonObject.getInt("id"), jsonObject.getString("name"),
-                                new URL(url), jsonObject.getString("description")));
+                                new URL(url), jsonObject.getString("description"), lugares));
 
                     } catch (JSONException e) {
 
@@ -284,6 +255,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(MapsActivity.this, listaDeTours);
         viewPager.setAdapter(viewPagerAdapter);
+    }
+
+    @Override
+    public void onPageScrolled(int i, float v, int i1) {
+
+    }
+
+    @Override
+    public void onPageSelected(int i) {
+        Tour tour = listaDeTours.get(i);
+        Place place [] = tour.getPlaces();
+
+        for(Place p : place){
+            makeMarker(new LatLng(p.getLatitude(),p.getLongitude()), tour.getDescription(), p.getPlaceTypeId());
+        }
+    }
+
+    private void makeMarker(LatLng latLng, String description, int placeTypeId) {
+        mMap.addMarker(new MarkerOptions().position(latLng).title(description));
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int i) {
+
     }
 }
 

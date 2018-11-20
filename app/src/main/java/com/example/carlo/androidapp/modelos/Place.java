@@ -1,8 +1,9 @@
 package com.example.carlo.androidapp.modelos;
 
+import java.io.Serializable;
 import java.net.URL;
 
-public class Place {
+public class Place implements Serializable {
 
     private String name;
     private String description;
