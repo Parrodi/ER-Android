@@ -67,13 +67,13 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
             @Override
             public void onClick(View v) {
                 mMap.clear();
+                puntosDeInteres.setBackground(getDrawable(R.drawable.presspuntointeresbtn));
+                parada.setBackground(getDrawable(R.drawable.paradasbtn));
+                recomendacion.setBackground(getDrawable(R.drawable.recomendacionesbtn));
                 for(Place p : tour.getPlaces()){
                     if(p.getPlaceTypeId() == 1) {
                         LatLng location = new LatLng(p.getLatitude(), p.getLongitude());
                         String name = p.getName();
-                        puntosDeInteres.setBackground(getDrawable(R.drawable.presspuntointeresbtn));
-                        parada.setBackground(getDrawable(R.drawable.paradasbtn));
-                        recomendacion.setBackground(getDrawable(R.drawable.recomendacionesbtn));
                         mMap.addMarker(new MarkerOptions().position(location).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.pinpuntodeinteres)));
                     }
                 }
@@ -85,13 +85,13 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
             @Override
             public void onClick(View v) {
                 mMap.clear();
+                parada.setBackground(getDrawable(R.drawable.presparadabtn));
+                puntosDeInteres.setBackground(getDrawable(R.drawable.puntodeinteresbtn));
+                recomendacion.setBackground(getDrawable(R.drawable.recomendacionesbtn));
                 for(Place p : tour.getPlaces()){
                     if(p.getPlaceTypeId() == 2) {
                         LatLng location = new LatLng(p.getLatitude(), p.getLongitude());
                         String name = p.getName();
-                        parada.setBackground(getDrawable(R.drawable.presparadabtn));
-                        puntosDeInteres.setBackground(getDrawable(R.drawable.puntodeinteresbtn));
-                        recomendacion.setBackground(getDrawable(R.drawable.recomendacionesbtn));
                         mMap.addMarker(new MarkerOptions().position(location).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.pinparada)));
                     }
                 }
@@ -102,23 +102,19 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
             @Override
             public void onClick(View v) {
                 mMap.clear();
+                recomendacion.setBackground(getDrawable(R.drawable.presrecomendacionbtn));
+                parada.setBackground(getDrawable(R.drawable.paradasbtn));
+                puntosDeInteres.setBackground(getDrawable(R.drawable.puntodeinteresbtn));
                 for(Place p : tour.getPlaces()){
                     if(p.getPlaceTypeId() == 3) {
                         LatLng location = new LatLng(p.getLatitude(), p.getLongitude());
                         String name = p.getName();
-                        recomendacion.setBackground(getDrawable(R.drawable.presrecomendacionbtn));
-                        parada.setBackground(getDrawable(R.drawable.paradasbtn));
-                        puntosDeInteres.setBackground(getDrawable(R.drawable.puntodeinteresbtn));
                         mMap.addMarker(new MarkerOptions().position(location).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.pinrecomendacion)));
                     }
                 }
             }
         });
-
-
     }
-
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -229,6 +225,4 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
         }
         return false;
     }
-
-
 }

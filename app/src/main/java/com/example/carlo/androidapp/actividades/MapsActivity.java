@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -49,7 +50,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, ViewPager.OnPageChangeListener {
 
@@ -63,6 +66,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private static final float DEFAULT_ZOOM = 13f;
 
+    private static final String accesstoken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVqZW1wbG9AZ21haWwuY29tIiwiaWF0IjoxNTQyODEyODc2fQ.78dJiUzXvK72lffZDnN-9-WG6fjIZEKwmGEMlBXL3hA";
+
+    int j = 0;
     //vars
     private Boolean mLocationPermissionGranted = false;
     private GoogleMap mMap;
@@ -71,11 +77,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     //Request
     private RequestQueue mRequestQueue;
-    String url = "https://ertourister.appspot.com/";
-    String PATH_TO_LOCATION = "location";
+    String url = "https://er-citytourister.appspot.com/";
     String PATH_TO_TOURS = "tour";
-    String PATH_TO_PLACE_TYPE =  "placetype";
-    String PATH_TO_PLACES =  "places";
     private List<Tour> listaDeTours;
     private List<Place> listaDePlaces;
 
@@ -88,14 +91,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         listaDeTours = new ArrayList<>();
         listaDePlaces = new ArrayList<>();
         getLocationPermission();
-        Button botonPulsera = (Button)findViewById(R.id.buttonPulsera);
+        Button botonPulsera = (Button) findViewById(R.id.buttonPulsera);
 
         botonPulsera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MapsActivity.this, UserMapActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("tour", listaDeTours.get(0));
+                bundle.putSerializable("tour", listaDeTours.get(j));
                 i.putExtras(bundle);
                 startActivity(i);
             }
@@ -201,7 +204,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private void sendRequest(){
+    private void sendRequest() {
         mRequestQueue = Volley.newRequestQueue(this);
 
         JsonArrayRequest requestLocation = new JsonArrayRequest(url + PATH_TO_TOURS, new Response.Listener<JSONArray>() {
@@ -210,14 +213,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 JSONObject jsonObject;
 
-                for (int i = 0; i < response.length(); i++){
+                for (int i = 0; i < response.length(); i++) {
 
                     try {
                         jsonObject = response.getJSONObject(i);
                         String url = jsonObject.getString("image");
 
                         JSONArray jsonArrayPlace = jsonObject.getJSONArray("places");
-                        for(int j = 0; j < jsonArrayPlace.length(); j++){
+                        for (int j = 0; j < jsonArrayPlace.length(); j++) {
                             JSONObject jsonObjectPlaces = jsonArrayPlace.getJSONObject(j);
 
                             String name = jsonObjectPlaces.getString("name");
@@ -254,12 +257,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 Log.d(TAG, " Valio varriga :V (2)" + error);
             }
-        });
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                // Basic Authentication
+                //String auth = "Basic " + Base64.encodeToString(CONSUMER_KEY_AND_SECRET.getBytes(), Base64.NO_WRAP);
+
+                headers.put("Authorization", "Bearer " + accesstoken);
+                return headers;
+            }
+        };
+
         mRequestQueue.add(requestLocation);
+
+        Tour tour = listaDeTours.get(0);
+        Place place[] = tour.getPlaces();
+        for (Place p : place) {
+            Log.d(TAG, "Se hace xd " + p.getLatitude() + " " + p.getLongitude());
+            makeMarker(new LatLng(p.getLatitude(), p.getLongitude()), tour.getDescription(), p.getPlaceTypeId());
+        }
+
+        viewPager.addOnPageChangeListener(this);
     }
 
     private void setupViewPager(List<Tour> listaDeTours) {
-
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(MapsActivity.this, listaDeTours);
         viewPager.setAdapter(viewPagerAdapter);
     }
@@ -271,11 +293,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onPageSelected(int i) {
+        mMap.clear();
         Tour tour = listaDeTours.get(i);
-        Place place [] = tour.getPlaces();
-
-        for(Place p : place){
-            makeMarker(new LatLng(p.getLatitude(),p.getLongitude()), tour.getDescription(), p.getPlaceTypeId());
+        Place place[] = tour.getPlaces();
+        j = i;
+        for (Place p : place) {
+            makeMarker(new LatLng(p.getLatitude(), p.getLongitude()), tour.getDescription(), p.getPlaceTypeId());
         }
     }
 
