@@ -1,6 +1,7 @@
 package com.example.carlo.androidapp.actividades;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -13,7 +14,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,9 +63,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private static final float DEFAULT_ZOOM = 13f;
 
-    //Widget
-    private EditText mSearchText;
-
     //vars
     private Boolean mLocationPermissionGranted = false;
     private GoogleMap mMap;
@@ -88,15 +88,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         listaDeTours = new ArrayList<>();
         listaDePlaces = new ArrayList<>();
         getLocationPermission();
+        Button botonPulsera = (Button)findViewById(R.id.buttonPulsera);
 
-        //mSearchText = (EditText) findViewById(R.id.input_search);
-
+        botonPulsera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MapsActivity.this, UserMapActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("tour", listaDeTours.get(0));
+                i.putExtras(bundle);
+                startActivity(i);
+            }
+        });
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         sendRequest();
-
     }
-
 
     /**
      * Manipulates the map once available.

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_color"
-    tools:context=".Activities.LoginActivity">
+    tools:context=".actividades.LoginActivity">
 
     <Button
         android:id="@+id/iniciarSesion"

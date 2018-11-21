@@ -32,4 +32,5 @@
     <string name="title_activity_maps">Map</string>
     <string name="API_KEY">AIzaSyAKAVsEPYZebHtQG36Bp_Vb3nYLRno5eXM</string>
     <string name="compra_tus_boletos">COMPRA TUS BOLETOS</string>
+    <string name="title_activity_user_map">Map</string>
 </resources>

@@ -64,7 +64,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".actividades.TourDescriptionActivity" />
-        <activity android:name=".actividades.RegisterActivity">
+        <activity android:name=".actividades.RegisterActivity" />
+        <activity
+            android:name=".actividades.UserMapActivity"
+            android:label="@string/title_activity_user_map" />
+        <activity android:name=".actividades.PlacePopActivity" android:theme="@style/AppTheme.PopUp">
 
         </activity>
     </application>
