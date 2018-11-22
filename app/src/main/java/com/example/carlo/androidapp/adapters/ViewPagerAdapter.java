@@ -69,6 +69,7 @@ public class ViewPagerAdapter extends PagerAdapter {
             public void onClick(View v) {
 
                 Intent i = new Intent(context, TourDescriptionActivity.class);
+                i.putExtra("tour_id", recorrido.getId());
                 i.putExtra("tour_name", recorrido.getName());
                 i.putExtra("tour_description", recorrido.getDescription());
                 i.putExtra("tour_image", recorrido.getImage().toString());
