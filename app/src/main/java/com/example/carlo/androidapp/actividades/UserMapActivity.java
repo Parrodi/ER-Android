@@ -138,23 +138,6 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
-            mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-                @Override
-                public void onInfoWindowClick(Marker marker) {
-                    LatLng markerLocation = marker.getPosition();
-                    for(Place p : tour.getPlaces()){
-                        LatLng placeLocation = new LatLng(p.getLatitude(), p.getLongitude());
-                        if(markerLocation == placeLocation) {
-                            Intent i = new Intent(UserMapActivity.this, PlacePopActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("place", p);
-                            i.putExtras(bundle);
-                            startActivity(i);
-                        }
-                    }
-                }
-            });
-
             mMap.setOnMarkerClickListener(this);
         }
     }

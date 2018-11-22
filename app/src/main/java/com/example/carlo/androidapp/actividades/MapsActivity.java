@@ -230,6 +230,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             double longitude = jsonObjectPlaces.getDouble("longitude");
 
                             Place lugar = new Place(name, description, placeType, latitude, longitude);
+                            /*JSONArray jsonArrayImages = jsonObject.getJSONArray("imagesOfPlaces");
+
+                            String images[] = new String[jsonArrayImages.length()];
+                            for(int k = 0; k < jsonArrayImages.length(); k++){
+                                JSONObject jsonObjectImage = jsonArrayImages.getJSONObject(k);
+                                String imageUrl = jsonObjectImage.getString("image_url");
+                                images[k] = imageUrl;
+                            }
+
+
+                            lugar.setImagesOfPlaces(images);*/
+                            lugar.setNarrativeUrl(jsonObjectPlaces.getString("narrative_url"));
                             listaDePlaces.add(lugar);
 
                         }
@@ -249,7 +261,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 }
                 setupViewPager(listaDeTours);
-
+                Tour tour = listaDeTours.get(0);
+                Place place[] = tour.getPlaces();
+                for (Place p : place) {
+                    makeMarker(new LatLng(p.getLatitude(), p.getLongitude()), tour.getDescription(), p.getPlaceTypeId());
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -270,13 +286,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         };
 
         mRequestQueue.add(requestLocation);
-
-        Tour tour = listaDeTours.get(0);
-        Place place[] = tour.getPlaces();
-        for (Place p : place) {
-            Log.d(TAG, "Se hace xd " + p.getLatitude() + " " + p.getLongitude());
-            makeMarker(new LatLng(p.getLatitude(), p.getLongitude()), tour.getDescription(), p.getPlaceTypeId());
-        }
 
         viewPager.addOnPageChangeListener(this);
     }

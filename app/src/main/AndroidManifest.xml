@@ -68,9 +68,10 @@
         <activity
             android:name=".actividades.UserMapActivity"
             android:label="@string/title_activity_user_map" />
-        <activity android:name=".actividades.PlacePopActivity" android:theme="@style/AppTheme.PopUp">
-
-        </activity>
+        <activity
+            android:name=".actividades.PlacePopActivity"
+            android:theme="@style/AppTheme.PopUp"></activity>
+        <activity android:name=".actividades.PlaceDescriptionActivity"></activity>
     </application>
 
 </manifest>
