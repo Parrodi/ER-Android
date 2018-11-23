@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -114,6 +116,33 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
                 }
             }
         });
+
+        BottomNavigationView menu = (BottomNavigationView) findViewById(R.id.botomNavigation);
+        menu.setSelectedItemId(R.id.mapa);
+        menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.tours :
+                        finish();
+                        break;
+                    case R.id.tickets :
+                        break;
+                    case R.id.mapa :
+                        break;
+                    case R.id.salidas :
+                        Intent i = new Intent(UserMapActivity.this, TimeIntervaleActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("tour", tour);
+                        i.putExtras(bundle);
+                        startActivity(i);
+                        break;
+                    case R.id.menus :
+                        break;
+                }
+                return false;
+            }
+        });
     }
     /**
      * Manipulates the map once available.
@@ -192,6 +221,7 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
 
         mapFragment.getMapAsync(UserMapActivity.this);
     }
+
 
     @Override
     public boolean onMarkerClick(Marker marker) {

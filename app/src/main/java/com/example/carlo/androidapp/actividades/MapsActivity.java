@@ -3,16 +3,24 @@ package com.example.carlo.androidapp.actividades;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -23,15 +31,16 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.carlo.androidapp.R;
 import com.example.carlo.androidapp.adapters.ViewPagerAdapter;
+import com.example.carlo.androidapp.modelos.DateInformation;
 import com.example.carlo.androidapp.modelos.Place;
 import com.example.carlo.androidapp.modelos.Tour;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -40,6 +49,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -59,7 +69,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private static final float DEFAULT_ZOOM = 13f;
 
-    private static final String accesstoken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE0IiwiZW1haWwiOiJjYXJsb3NwYXJyb2RpQGVtYWlsLmNvbSIsInR5cGUiOiJVc2VyIiwiaWF0IjoxNTQyOTIyOTUxfQ.P1yZzKv8fm_OFfkO8JNd3ywM4cKnTaZNWnA7NHf0HEY";
+    private static final String accesstoken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE5IiwiZW1haWwiOiJkQGdtYWkuY29tYyIsInR5cGUiOiJVc2VyIiwiaWF0IjoxNTQyOTIzNDYzfQ.L8bgLtBeJx3EtdZYhLq16obFxRnqtLfrJ8T0WyqtNWc";
 
     int j = 0;
     //vars
@@ -74,6 +84,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     String PATH_TO_TOURS = "tour";
     private List<Tour> listaDeTours;
     private List<Place> listaDePlaces;
+    private List<DateInformation> listaDeDates;
 
     ViewPager viewPager;
 
@@ -83,22 +94,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         listaDeTours = new ArrayList<>();
         listaDePlaces = new ArrayList<>();
+        listaDeDates = new ArrayList<>();
         getLocationPermission();
-        Button botonPulsera = (Button) findViewById(R.id.buttonPulsera);
-
-        botonPulsera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MapsActivity.this, UserMapActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("tour", listaDeTours.get(j));
-                i.putExtras(bundle);
-                startActivity(i);
-            }
-        });
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         sendRequest();
+
+        BottomNavigationView menu = (BottomNavigationView) findViewById(R.id.botomNavigation);
+        menu.setSelectedItemId(R.id.tours);
+        menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.tours :
+
+                        break;
+                    case R.id.tickets :
+                        break;
+                    case R.id.mapa :
+                        Intent i = new Intent(MapsActivity.this, UserMapActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("tour", listaDeTours.get(j));
+                        i.putExtras(bundle);
+                        startActivity(i);
+                        break;
+                    case R.id.salidas :
+                        break;
+                    case R.id.menus :
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     /**
@@ -214,6 +241,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                         JSONArray jsonArrayPlace = jsonObject.getJSONArray("places");
                         for (int j = 0; j < jsonArrayPlace.length(); j++) {
+                            Log.d(TAG, "Si lo hace :V");
                             JSONObject jsonObjectPlaces = jsonArrayPlace.getJSONObject(j);
 
                             String name = jsonObjectPlaces.getString("name");
@@ -223,27 +251,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             double longitude = jsonObjectPlaces.getDouble("longitude");
 
                             Place lugar = new Place(name, description, placeType, latitude, longitude);
-                            /*JSONArray jsonArrayImages = jsonObject.getJSONArray("imagesOfPlaces");
-
-                            String images[] = new String[jsonArrayImages.length()];
-                            for(int k = 0; k < jsonArrayImages.length(); k++){
-                                JSONObject jsonObjectImage = jsonArrayImages.getJSONObject(k);
-                                String imageUrl = jsonObjectImage.getString("image_url");
-                                images[k] = imageUrl;
-                            }
-
-
-                            lugar.setImagesOfPlaces(images);*/
                             lugar.setNarrativeUrl(jsonObjectPlaces.getString("narrative_url"));
                             listaDePlaces.add(lugar);
 
                         }
 
+                        JSONArray jsonArrayDateInfo = jsonObject.getJSONArray("dateinformations");
+                        for(int k = 0; k < jsonArrayDateInfo.length(); k++){
+                            JSONObject jsonObjectDateInfo = jsonArrayDateInfo.getJSONObject(k);
+
+                            int dateId = jsonObjectDateInfo.getInt("date_id");
+                            int hourId = jsonObjectDateInfo.getInt("hour_id");
+                            int id = jsonObjectDateInfo.getInt("id");
+                            DateInformation date = new DateInformation(dateId, hourId);
+                            date.setId(id);
+                            listaDeDates.add(date);
+
+                        }
+
+                        DateInformation date[] = new DateInformation[listaDeDates.size()];
+                        date = listaDeDates.toArray(date);
+
                         Place lugares[] = new Place[listaDePlaces.size()];
                         lugares = listaDePlaces.toArray(lugares);
 
                         listaDeTours.add(new Tour(jsonObject.getInt("id"), jsonObject.getString("name"),
-                                new URL(url), jsonObject.getString("description"), lugares));
+                                new URL(url), jsonObject.getString("description"), lugares, date));
 
                     } catch (JSONException e) {
 

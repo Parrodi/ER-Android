@@ -10,17 +10,19 @@ public class Tour implements Serializable {
     private URL image;
     private String description;
     private Place[] places;
+    private DateInformation[] dateInformations;
 
     public Tour() {
 
     }
 
-    public Tour(int id, String name, URL image, String description, Place[] places) {
+    public Tour(int id, String name, URL image, String description, Place[] places, DateInformation[] dateInformations) {
         this.id = id;
         this.name = name;
         this.image = image;
         this.description = description;
         this.places = places;
+        this.dateInformations = dateInformations;
     }
 
     public int getId() {
@@ -61,5 +63,17 @@ public class Tour implements Serializable {
 
     public void setPlaces(Place[] places) {
         this.places = places;
+    }
+
+    public DateInformation[] getDateInformations() {
+        return dateInformations;
+    }
+
+    public void setDateInformations(DateInformation[] dateInformations) {
+        this.dateInformations = dateInformations;
+    }
+
+    public int sizeDates(){
+        return dateInformations.length;
     }
 }

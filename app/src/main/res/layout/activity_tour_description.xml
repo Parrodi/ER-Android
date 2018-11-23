@@ -7,7 +7,6 @@
     android:layout_height="match_parent">
 
 
-
     <Button
         android:id="@+id/botonCompra"
         android:layout_width="match_parent"
@@ -16,19 +15,19 @@
         android:text="COMPRAR BOLETO"
         android:textAlignment="center"
         android:textColor="#fff"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/botomNavigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/nombre_tour"
         android:layout_width="0dp"
         android:layout_height="55dp"
-        android:text="A la pinche verga"
-        android:textAlignment="center"
         android:gravity="center"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -62,10 +61,23 @@
                 android:id="@+id/tour_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Aver"
                 android:textColor="#404040" />
         </LinearLayout>
     </ScrollView>
+
+    <android.support.design.widget.BottomNavigationView
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/botomNavigation"
+        app:menu="@menu/nav_menu"
+        app:itemIconTint="@color/nav_item_colors"
+        app:itemTextColor="@color/nav_item_colors">
+
+    </android.support.design.widget.BottomNavigationView>
 
 
 </android.support.constraint.ConstraintLayout>

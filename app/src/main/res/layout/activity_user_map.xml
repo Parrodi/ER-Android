@@ -15,68 +15,6 @@
         android:layout_marginBottom="50dp"
         tools:context=".actividades.UserMapActivity" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/buttonPerfil"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/white"
-            android:drawableBottom="@drawable/botonperfil"
-            android:paddingBottom="12dp"
-            tools:ignore="ButtonStyle" />
-
-        <Button
-            android:id="@+id/buttonTicket"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/white"
-            android:drawableBottom="@drawable/botonticket"
-            android:paddingBottom="12dp"
-            tools:ignore="ButtonStyle" />
-
-        <Button
-            android:id="@+id/buttonPulsera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/white"
-            android:drawableBottom="@drawable/botonpulsera"
-            android:paddingBottom="4dp"
-            tools:ignore="ButtonStyle" />
-
-        <Button
-            android:id="@+id/buttonSalida"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/white"
-            android:drawableBottom="@drawable/botonsalidas"
-            android:paddingBottom="12dp"
-            tools:ignore="ButtonStyle" />
-
-        <Button
-            android:id="@+id/buttonMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/white"
-            android:drawableBottom="@drawable/botonmenu"
-            android:paddingBottom="12dp"
-            tools:ignore="ButtonStyle" />
-    </LinearLayout>
-
     <Button
         android:id="@+id/buttonParada"
         android:layout_width="56dp"
@@ -116,6 +54,22 @@
         android:background="@drawable/recomendacionesbtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <android.support.design.widget.BottomNavigationView
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/botomNavigation"
+        app:menu="@menu/nav_menu"
+        app:itemIconTint="@color/nav_item_colors"
+        app:itemTextColor="@color/nav_item_colors"
+        android:background="#fff">
+
+    </android.support.design.widget.BottomNavigationView>
 
 
 </android.support.constraint.ConstraintLayout>

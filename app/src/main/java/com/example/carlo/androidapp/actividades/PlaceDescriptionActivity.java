@@ -1,8 +1,11 @@
 package com.example.carlo.androidapp.actividades;
 
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.carlo.androidapp.R;
@@ -25,6 +28,27 @@ public class PlaceDescriptionActivity extends AppCompatActivity {
 
         placeName.setText(place.getName());
         placeDescription.setText(place.getDescription());
+
+        BottomNavigationView menu = (BottomNavigationView) findViewById(R.id.botomNavigation);
+
+        menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.tours :
+                        break;
+                    case R.id.tickets :
+                        break;
+                    case R.id.mapa :
+                        break;
+                    case R.id.salidas :
+                        break;
+                    case R.id.menus :
+                        break;
+                }
+                return false;
+            }
+        });
 
         /*ViewPager viewPager = findViewById(R.id.viewPager);
         ImageAdapter adapter = new ImageAdapter(this, place.getImagesOfPlaces());
