@@ -64,24 +64,19 @@
             </intent-filter>
         </activity>
         <activity android:name=".actividades.TourDescriptionActivity" />
-        <activity android:name=".actividades.pay_gettickets"/>
+        <activity android:name=".actividades.pay_gettickets" />
         <activity android:name=".actividades.RegisterActivity" />
         <activity android:name=".actividades.pay_getNames" />
         <activity android:name=".actividades.pay_showticket" />
-        <activity android:name=".actividades.pay_getdate">
-
-        </activity>
+        <activity android:name=".actividades.pay_getdate"></activity>
         <activity
             android:name=".actividades.UserMapActivity"
             android:label="@string/title_activity_user_map" />
         <activity
             android:name=".actividades.PlacePopActivity"
-            android:theme="@style/AppTheme.PopUp">
-
-        </activity>
-        <activity android:name=".actividades.PlaceDescriptionActivity">
-
-        </activity>
+            android:theme="@style/AppTheme.PopUp"></activity>
+        <activity android:name=".actividades.PlaceDescriptionActivity"></activity>
+        <activity android:name=".actividades.TimeIntervaleActivity"></activity>
     </application>
 
 </manifest>
