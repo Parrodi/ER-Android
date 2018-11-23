@@ -24,14 +24,16 @@ public class RecyclerViewAdapterTicket extends RecyclerView.Adapter<RecyclerView
     private Context mContext;
     private long unixtimestamp;
     private Intent mintent;
+    private int tourid;
 
 
-    public RecyclerViewAdapterTicket(Context mContext,ArrayList<String> mTicketTypes, ArrayList<Double> mTicketPrice, long unixtimestamp) {
+    public RecyclerViewAdapterTicket(Context mContext,ArrayList<String> mTicketTypes, ArrayList<Double> mTicketPrice, long unixtimestamp,int tourid) {
         Log.d(TAG, "RecyclerViewAdapterTicket: called.");
         this.mTicketTypes = mTicketTypes;
         this.mTicketPrice = mTicketPrice;
         this.mContext = mContext;
         this.unixtimestamp = unixtimestamp;
+        this.tourid =tourid;
         mintent = new Intent(mContext,pay_getNames.class);
 
     }
@@ -107,6 +109,7 @@ public class RecyclerViewAdapterTicket extends RecyclerView.Adapter<RecyclerView
 
     public void startIntent(){
         mintent.putExtra("dateselected",unixtimestamp);
+        mintent.putExtra("tour_id", tourid);
         mContext.startActivity(mintent);
     }
 }

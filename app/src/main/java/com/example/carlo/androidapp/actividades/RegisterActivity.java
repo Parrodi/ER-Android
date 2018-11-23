@@ -3,7 +3,6 @@ package com.example.carlo.androidapp.actividades;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +14,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.carlo.androidapp.R;
 import com.example.carlo.androidapp.adapters.inputFormatAuthentication;
 import com.facebook.CallbackManager;
@@ -35,26 +40,14 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
     private static final int SIGN_IN_CODE = 777;
     private GoogleApiClient googleApiClient;
-    public String answer;
     Button fb, gg;
     EditText name, email, phone, pswd, pswdc;
-    TextView em, nom, tel, psw1, psw2, CO;
+    TextView em, nom, tel, psw1, psw2;
     CheckBox terminosycondiciones;
     CallbackManager callbackManager;
 
@@ -91,10 +84,10 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                                     String email = object.getString("email");
                                     String name = object.getString("name");
                                     String password = object.getString("id");
-                                    new RegisterActivity.RegisterUserManager().execute("http://ertourister.appspot.com/user/add", name, email, password);
+                                    loginSocialNetworks(name,email,password);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
-                                    Toast.makeText(RegisterActivity.this, "no se pudieron los datos de fb",
+                                    Toast.makeText(RegisterActivity.this, "No se pudieron obtener datos de Facebook",
                                             Toast.LENGTH_SHORT).show();
                                 }
 
@@ -160,84 +153,86 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     }
 
 
-    private class  RegisterUserManager extends AsyncTask<String, Void, String> {
+    public void loginSocialNetworks(final String name, final String email, final String password) throws JSONException {
+        RequestQueue loginqueue = Volley.newRequestQueue(this);
+        String url = "https://er-citytourister.appspot.com/user/login";
+        JSONObject postparams = new JSONObject();
+        postparams.put("email", email);
+        postparams.put("password", password);
+        JsonObjectRequest loginrequest = new JsonObjectRequest(Request.Method.POST, url, postparams, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    String info = response.getString("info");
+                    if(info.equals("Login success")){
+                        int userid = response.getInt("id");
+                        String token = response.getString("token");
+                        Intent mintent = new Intent(RegisterActivity.this, MapsActivity.class);
+                        mintent.putExtra("userid",userid);
+                        mintent.putExtra("token", token);
+                        startActivity(mintent);
+                    }else addUser(name,email,password, "");
 
-        @Override
-        protected String doInBackground(String... strings) {
-            CO = (TextView) findViewById(R.id.textViewCO);
-            StringBuffer response = new StringBuffer();
-            try{
-                URL url = new URL(strings[0]);
-                HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-                conn.setReadTimeout(15000);
-                conn.setConnectTimeout(15000);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
 
-                HashMap<String, String> postParams = new HashMap<>();
-                postParams.put("name", strings[1]);
-                postParams.put("email", strings[2]);
-                postParams.put("password", strings[3]);
-
-
-
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-                writer.write(getPostString(postParams));
-                writer.flush();
-                writer.close();
-                os.close();
-
-                int responseCode = conn.getResponseCode();
-                if (responseCode == HttpURLConnection.HTTP_OK){
-                    String line;
-                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    while((line = br.readLine()) != null){
-                        response.append(line);
-                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
-            }catch (Exception e){
-                e.printStackTrace();
             }
-
-            return response.toString();
-        }
-
-
-        private String getPostString(HashMap<String, String> params)throws UnsupportedEncodingException {
-
-            StringBuffer sb = new StringBuffer();
-            boolean first = true;
-            for(Map.Entry<String, String> entry: params.entrySet()){
-                if(first)
-                    first = false;
-                else
-                    sb.append("&");
-                sb.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
-                sb.append("=");
-                sb.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
             }
-            return sb.toString();
-
-        }
-
-        protected void onPostExecute(String response){
-            try {
-                JSONObject jsonresponse = new JSONObject(response);
-                answer= jsonresponse.getString("info");
-            } catch (JSONException e) {
-                e.printStackTrace();
-                answer = "fail";
-            }
-
-            CO.setText(answer);
-        }
-
+        });
+        loginqueue.add(loginrequest);
     }
 
+
+    public void addUser(String name, final String email, final String password, String phone) throws JSONException {
+        RequestQueue addqueue = Volley.newRequestQueue(this);
+        String url = "https://er-citytourister.appspot.com/user/add";
+        JSONObject postparams = new JSONObject();
+        postparams.put("name",name);
+        postparams.put("email", email);
+        postparams.put("password", password);
+        postparams.put("phone_number", phone);
+
+        JsonObjectRequest addrequest = new JsonObjectRequest(Request.Method.POST, url, postparams, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    String info = response.getString("info");
+                    if(info.equals("Email already in use")){
+                        Toast.makeText(RegisterActivity.this, "El correo proporcionado no está disponible",
+                                Toast.LENGTH_LONG).show();
+                    }else if(info.equals("New user added")){
+                        int userid = response.getInt("id");
+                        String token = response.getString("token");
+                        Intent mintent = new Intent(RegisterActivity.this, MapsActivity.class);
+                        mintent.putExtra("userid",userid);
+                        mintent.putExtra("token", token);
+                        Toast.makeText(RegisterActivity.this, "Nuevo usuario agregado!",
+                                Toast.LENGTH_LONG).show();
+                        startActivity(mintent);
+                    }else
+                        Toast.makeText(RegisterActivity.this, "Hubo un error al agregar tus datos",
+                                Toast.LENGTH_LONG).show();
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+        addqueue.add(addrequest);
+    }
 
 
 
@@ -256,7 +251,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
 
 
-    public void registro(View v){
+    public void registro(View v) throws JSONException {
         boolean correctinput=true;
         String message;
 
@@ -305,7 +300,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
         if (correctinput){
             message = "Input Válido y Completo!";
-            new RegisterUserManager().execute("http://ertourister.appspot.com/user/add", name.getText().toString(), email.getText().toString(),pswd.getText().toString(), phone.getText().toString());
+            addUser(name.getText().toString(), email.getText().toString(),pswd.getText().toString(), phone.getText().toString());
         } else message = "Input Inválido o Incompleto!";
 
         Toast.makeText(RegisterActivity.this, message,

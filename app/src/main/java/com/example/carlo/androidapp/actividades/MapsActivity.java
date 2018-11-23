@@ -3,22 +3,16 @@ package com.example.carlo.androidapp.actividades;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -32,12 +26,12 @@ import com.example.carlo.androidapp.adapters.ViewPagerAdapter;
 import com.example.carlo.androidapp.modelos.Place;
 import com.example.carlo.androidapp.modelos.Tour;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -46,7 +40,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -66,7 +59,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private static final float DEFAULT_ZOOM = 13f;
 
-    private static final String accesstoken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVqZW1wbG9AZ21haWwuY29tIiwiaWF0IjoxNTQyODEyODc2fQ.78dJiUzXvK72lffZDnN-9-WG6fjIZEKwmGEMlBXL3hA";
+    private static final String accesstoken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE0IiwiZW1haWwiOiJjYXJsb3NwYXJyb2RpQGVtYWlsLmNvbSIsInR5cGUiOiJVc2VyIiwiaWF0IjoxNTQyOTIyOTUxfQ.P1yZzKv8fm_OFfkO8JNd3ywM4cKnTaZNWnA7NHf0HEY";
 
     int j = 0;
     //vars
@@ -280,7 +273,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 // Basic Authentication
                 //String auth = "Basic " + Base64.encodeToString(CONSUMER_KEY_AND_SECRET.getBytes(), Base64.NO_WRAP);
 
-                headers.put("Authorization", "Bearer " + accesstoken);
+                headers.put("auth", accesstoken);
                 return headers;
             }
         };

@@ -46,8 +46,8 @@ public class pay_getNames extends AppCompatActivity {
         cont = (Button)findViewById(R.id.Continuar);
         myintent = getIntent();
         unixtimestamp = myintent.getLongExtra("dateselected",0);
-        accesstoken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhcmxvc3BhcnJvZGlAZW1haWwuY29tIiwiaWF0IjoxNTQyODM2MTM1fQ.8eLCfpGucCmbxJUKdRmiFwjEFsWvNks5ySrkXiO7fjk";
-        tourid = 1;
+        accesstoken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE0IiwiZW1haWwiOiJjYXJsb3NwYXJyb2RpQGVtYWlsLmNvbSIsInR5cGUiOiJVc2VyIiwiaWF0IjoxNTQyOTIyOTUxfQ.P1yZzKv8fm_OFfkO8JNd3ywM4cKnTaZNWnA7NHf0HEY";
+        tourid = myintent.getIntExtra("tour_id",tourid);
         getVariables();
     }
 
@@ -90,7 +90,7 @@ public class pay_getNames extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("Authorization", "Bearer " + accesstoken);
+                headers.put("auth", accesstoken);
                 return headers;
             }
         };
@@ -100,7 +100,7 @@ public class pay_getNames extends AppCompatActivity {
     private void initRecyclerView(){
         Log.d(TAG, "initRecyclerView: init recyclerview");
         RecyclerView recyclerView = findViewById(R.id.recyclerviewnames);
-        final RecyclerViewAdapterNames adapter = new RecyclerViewAdapterNames(this,mTicketTypes,mTicketCount,ticketType,ticketCount,unixtimestamp);
+        final RecyclerViewAdapterNames adapter = new RecyclerViewAdapterNames(this,mTicketTypes,mTicketCount,ticketType,ticketCount,unixtimestamp,tourid);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         cont.setOnClickListener(new View.OnClickListener() {

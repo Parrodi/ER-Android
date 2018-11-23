@@ -15,6 +15,8 @@ public class pay_getdate extends AppCompatActivity {
     private CalendarView mCalendar;
     private TextView txt;
     private long date;
+    private int tourid;
+    Intent mintent;
 
 
     @Override
@@ -24,6 +26,8 @@ public class pay_getdate extends AppCompatActivity {
         mCalendar = (CalendarView)findViewById(R.id.MyCalendar);
         txt = (TextView)findViewById(R.id.textEscribeEmail);
         mCalendar.setMinDate(mCalendar.getDate());
+        mintent = getIntent();
+        tourid = mintent.getIntExtra("tour_id", 0);
         date = mCalendar.getDate()/1000;
         final Calendar c = Calendar.getInstance();
         mCalendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -45,6 +49,7 @@ public class pay_getdate extends AppCompatActivity {
     public void dateSelected(View V){
         Intent i = new Intent(pay_getdate.this, pay_gettickets.class);
         i.putExtra("dateselected",date);
+        i.putExtra("tour_id",tourid);
         startActivity(i);
 
 

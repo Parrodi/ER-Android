@@ -2,28 +2,19 @@ package com.example.carlo.androidapp.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.carlo.androidapp.R;
-import com.example.carlo.androidapp.actividades.MapsActivity;
-import com.example.carlo.androidapp.actividades.TourDescriptionActivity;
-import com.example.carlo.androidapp.modelos.Tour;
 import com.example.carlo.androidapp.actividades.TourDescriptionActivity;
 import com.example.carlo.androidapp.modelos.Tour;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
@@ -69,6 +60,7 @@ public class ViewPagerAdapter extends PagerAdapter {
             public void onClick(View v) {
 
                 Intent i = new Intent(context, TourDescriptionActivity.class);
+                i.putExtra("tour_id", recorrido.getId());
                 i.putExtra("tour_name", recorrido.getName());
                 i.putExtra("tour_description", recorrido.getDescription());
                 i.putExtra("tour_image", recorrido.getImage().toString());

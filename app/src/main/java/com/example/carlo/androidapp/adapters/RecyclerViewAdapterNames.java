@@ -29,15 +29,17 @@ public class RecyclerViewAdapterNames extends RecyclerView.Adapter<RecyclerViewA
     private Context mContext;
     private long unixtimestamp;
     private Intent mintent;
+    private int tourid;
 
 
-    public RecyclerViewAdapterNames( Context mContext,ArrayList<String> ticketTypes, ArrayList<Integer> ticketCount, ArrayList<String> ticketType, ArrayList<Integer> countTicketType, long unixtimestamp) {
+    public RecyclerViewAdapterNames( Context mContext,ArrayList<String> ticketTypes, ArrayList<Integer> ticketCount, ArrayList<String> ticketType, ArrayList<Integer> countTicketType, long unixtimestamp, int tourid) {
         this.ticketTypes = ticketTypes;
         this.ticketCount = ticketCount;
         this.mContext = mContext;
         this.countTicketType =countTicketType;
         this.ticketType=ticketType;
         this.unixtimestamp = unixtimestamp;
+        this.tourid = tourid;
         mintent = new Intent(mContext,pay_showticket.class);
 
     }
@@ -118,6 +120,7 @@ public class RecyclerViewAdapterNames extends RecyclerView.Adapter<RecyclerViewA
     public void startIntent(){
         int datasize = ticketCount.size();
         mintent.putExtra("datasize",datasize);
+        mintent.putExtra("tour_id", tourid);
         mintent.putIntegerArrayListExtra("Ages array", ages);
         mintent.putStringArrayListExtra("Names array", names);
         mintent.putIntegerArrayListExtra("Count array", countTicketType);
