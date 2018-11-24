@@ -43,7 +43,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".actividades.MainActivity" />
-        <activity android:name=".actividades.LoginActivity" />
+        <activity android:name=".actividades.LoginActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -65,22 +71,16 @@
         <activity android:name=".actividades.pay_getNames" />
         <activity android:name=".actividades.pay_showticket" />
         <activity android:name=".actividades.pay_getdate">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-        <activity android:name=".actividades.TourDescriptionActivity" />
-        <activity android:name=".actividades.RegisterActivity" />
         <activity
             android:name=".actividades.UserMapActivity"
             android:label="@string/title_activity_user_map" />
         <activity
             android:name=".actividades.PlacePopActivity"
-            android:theme="@style/AppTheme.PopUp"></activity>
-        <activity android:name=".actividades.PlaceDescriptionActivity"></activity>
-        <activity android:name=".actividades.TimeIntervaleActivity"></activity>
+            android:theme="@style/AppTheme.PopUp">
+        </activity>
+        <activity android:name=".actividades.PlaceDescriptionActivity"/>
+        <activity android:name=".actividades.TimeIntervaleActivity"/>
     </application>
 
 </manifest>

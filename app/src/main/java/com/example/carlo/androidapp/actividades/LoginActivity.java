@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -118,7 +119,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
 
     public void basicLogin(String email, String password) throws JSONException {
-        RequestQueue loginqueue = Volley.newRequestQueue(this);
+        final RequestQueue loginqueue = Volley.newRequestQueue(this);
         String url = "https://er-citytourister.appspot.com/user/login";
         JSONObject postparams = new JSONObject();
         postparams.put("email", email);
@@ -135,9 +136,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         mintent.putExtra("userid",userid);
                         mintent.putExtra("token", token);
                         startActivity(mintent);
+                    }else{
+                        Toast.makeText(LoginActivity.this, "Datos de inicio de sesión incorrectos",
+                                Toast.LENGTH_LONG).show();
                     }
-                    Toast.makeText(LoginActivity.this, "Datos de inicio de sesión incorrectos",
-                            Toast.LENGTH_LONG).show();
+
 
 
                 } catch (JSONException e) {
@@ -148,6 +151,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.d("Login", "Entro al error login");
                 error.printStackTrace();
             }
         });

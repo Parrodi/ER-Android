@@ -1,40 +1,36 @@
 package com.example.carlo.androidapp.actividades;
 
 import android.annotation.SuppressLint;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
+import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.carlo.androidapp.R;
 import com.example.carlo.androidapp.modelos.DateInformation;
 import com.example.carlo.androidapp.modelos.DateInterval;
-import com.example.carlo.androidapp.modelos.HourInterval;
-import com.example.carlo.androidapp.modelos.Place;
 import com.example.carlo.androidapp.modelos.Tour;
-import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -50,14 +46,14 @@ public class TimeIntervaleActivity extends AppCompatActivity {
     String PATH_TO_HOUR_INTERVAL = "hourinterval";
 
     Tour tour;
-    int dateId;
-    int hourId;
 
     DateInformation dates[];
 
     List<DateInterval> dateIntervals;
     List<DateInformation> dateInformations;
-    List<HourInterval> hourIntervals;
+
+    TextView fecha;
+    LinearLayout layoutHorarios;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,23 +62,43 @@ public class TimeIntervaleActivity extends AppCompatActivity {
 
         dateIntervals = new ArrayList<>();
         dateInformations = new ArrayList<>();
-        hourIntervals = new ArrayList<>();
+
 
         tour = (Tour) getIntent().getExtras().getSerializable("tour");
 
         dates = tour.getDateInformations();
 
-        Date currentTime = Calendar.getInstance().getTime();
+        layoutHorarios = (LinearLayout)findViewById(R.id.layout);
+
+        fecha = (TextView)findViewById(R.id.fecha);
 
         sendRequest(dates);
 
-        TextView fecha = (TextView)findViewById(R.id.fecha);
-        fecha.setOnClickListener(new View.OnClickListener() {
+        BottomNavigationView menu = (BottomNavigationView) findViewById(R.id.botomNavigation);
+        menu.setSelectedItemId(R.id.salidas);
+        menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                for (HourInterval hi : hourIntervals){
-                    Log.d(TAG, hi.getStartTime() + " " + hi.getEndTime() + " " + hi.getFrequency());
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.tours :
+                        Intent i = new Intent(TimeIntervaleActivity.this, MapsActivity.class);
+                        startActivity(i);
+                        break;
+                    case R.id.tickets :
+                        break;
+                    case R.id.mapa :
+                        Intent in = new Intent(TimeIntervaleActivity.this, UserMapActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("tour", tour);
+                        in.putExtras(bundle);
+                        startActivity(in);
+                        break;
+                    case R.id.salidas :
+                        break;
+                    case R.id.menus :
+                        break;
                 }
+                return false;
             }
         });
 
@@ -90,7 +106,7 @@ public class TimeIntervaleActivity extends AppCompatActivity {
 
     private void sendRequest(final DateInformation[] date) {
 
-            mRequestQueue = Volley.newRequestQueue(this);
+        mRequestQueue = Volley.newRequestQueue(this);
 
         JsonArrayRequest request = new JsonArrayRequest( url + PATH_TO_DATE_INTERVAL, new Response.Listener<JSONArray>() {
             @Override
@@ -103,7 +119,7 @@ public class TimeIntervaleActivity extends AppCompatActivity {
                     try {
                         jsonObject = response.getJSONObject(i);
                         for (DateInformation aDate : date) {
-                            Log.d(TAG, jsonObject.getInt("id") + "  " + aDate.getDateId());
+
                             if (jsonObject.getInt("id") == aDate.getDateId()) {
                                 String startDate = jsonObject.getString("start_date");
                                 String endDate = jsonObject.getString("end_date");
@@ -114,8 +130,15 @@ public class TimeIntervaleActivity extends AppCompatActivity {
                                 di.setId(id);
 
                                 if (checkDay(di.getStartDate(), di.getEndDate())) {
+                                    @SuppressLint("SimpleDateFormat")SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                    String todayDate;
+                                    int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+                                    int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+                                    int year = Calendar.getInstance().get(Calendar.YEAR);
+                                    todayDate = day+"/"+month+"/"+year;
+                                    fecha.setText(todayDate);
                                     dateInformations.add(aDate);
-                                } else Log.d(TAG, "Tambien se pudo pero diferente");
+                                }
 
                             }
                         }
@@ -156,7 +179,6 @@ public class TimeIntervaleActivity extends AppCompatActivity {
         JsonArrayRequest request = new JsonArrayRequest( url + PATH_TO_HOUR_INTERVAL, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                Log.d(TAG, "K chingadoz prro :V          " + response.length() + "   " + dateInformations.size());
                 JSONObject jsonObject;
 
                 for (int i = 0; i < response.length(); i++) {
@@ -164,14 +186,27 @@ public class TimeIntervaleActivity extends AppCompatActivity {
                     try {
                         jsonObject = response.getJSONObject(i);
                         for(DateInformation di: dateInformations) {
-                            Log.d(TAG, "MIRAMEEEEE: " + jsonObject.getInt("id") + "  " + di.getHourId());
                             if (jsonObject.getInt("id") == di.getHourId()) {
-                                Log.d(TAG, "Si se pudo maldita piruja");
                                 long startTime = jsonObject.getLong("start_time");
                                 long endTime = jsonObject.getLong("end_time");
                                 int freq = jsonObject.getInt("frequency");
-                                HourInterval hi = new HourInterval(startTime, endTime, freq);
-                                hourIntervals.add(hi);
+
+
+                                Date start = new java.util.Date(startTime*1000L);
+                                @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new java.text.SimpleDateFormat("hh:mm");
+                                String formattedDateStart = sdf.format(start);
+
+                                Date end = new java.util.Date(endTime*1000L);
+                                @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf2 = new java.text.SimpleDateFormat("hh:mm");
+                                String formattedDateEnd = sdf2.format(end);
+
+                                String horario = formattedDateStart + "-" + formattedDateEnd + "                         " + freq;
+                                TextView lineaDeHorario = new TextView(TimeIntervaleActivity.this);
+                                lineaDeHorario.setText(horario);
+                                lineaDeHorario.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                                        LinearLayout.LayoutParams.WRAP_CONTENT));
+                                layoutHorarios.addView(lineaDeHorario);
+
                             }
                         }
 

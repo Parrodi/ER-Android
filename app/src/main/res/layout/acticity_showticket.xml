@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_color">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/boleto"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+
+        <TextView
+            android:id="@+id/Tour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="60dp"
+            android:text="Tour"
+            android:textColor="#E21181"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/nombreTour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/Tour"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="5dp"
+            android:text="Nombre de Destino"
+            android:textColor="#043764" />
+
+        <TextView
+            android:id="@+id/Fecha"
+            android:layout_below="@+id/nombreTour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="20dp"
+            android:text="Fecha"
+            android:textColor="#E21181"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textoDeFecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/Fecha"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="5dp"
+            android:text="Nombre de Destino"
+            android:textColor="#043764" />
+
+        <TextView
+            android:id="@+id/Pasajeros"
+            android:layout_below="@+id/textoDeFecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="50dp"
+            android:text="Pasajeros"
+            android:textColor="#E21181"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textoPasajeros"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/Pasajeros"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="5dp"
+            android:text="pasajeros text"
+            android:textColor="#043764" />
+
+        <TextView
+            android:id="@+id/Pagado"
+            android:layout_below="@+id/Pasajeros"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="120dp"
+            android:text="Pagado"
+            android:textColor="#E21181"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:backgroundTint="#FCB600"
+            android:text="DETALLES TOUR"
+            android:layout_below="@+id/Pagado"
+            android:layout_marginTop="30dp"
+            android:textColor="#FFFFFF" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
