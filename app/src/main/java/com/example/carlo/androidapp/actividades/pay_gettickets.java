@@ -1,6 +1,7 @@
 package com.example.carlo.androidapp.actividades;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,6 +29,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class pay_gettickets extends AppCompatActivity {
+
+    SharedPreferences prf;
     private static final String TAG = "pay_gettickets";
     private ArrayList<String> mTicketTypes = new ArrayList<>();
     private ArrayList<Double> mTicketPrices = new ArrayList<>();
@@ -42,10 +45,15 @@ public class pay_gettickets extends AppCompatActivity {
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payform2);
+
+        prf = getSharedPreferences("user_details",MODE_PRIVATE);
+
         cont = (Button)findViewById(R.id.Continuar);
         myintent = getIntent();
         unixtimestamp = myintent.getLongExtra("dateselected",0);
-        accesstoken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE0IiwiZW1haWwiOiJjYXJsb3NwYXJyb2RpQGVtYWlsLmNvbSIsInR5cGUiOiJVc2VyIiwiaWF0IjoxNTQyOTIyOTUxfQ.P1yZzKv8fm_OFfkO8JNd3ywM4cKnTaZNWnA7NHf0HEY";
+
+        accesstoken = prf.getString("token", null);
+
         tourid = myintent.getIntExtra("tour_id",0);
         getVariables();
 

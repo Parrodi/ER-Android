@@ -46,16 +46,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="61dp"
+                android:layout_marginBottom="0dp"
                 android:layout_toStartOf="@+id/profilebutton"
                 android:paddingEnd="20dp"
                 android:text="Mi Perfil"
                 android:textAlignment="textEnd"
                 android:textColor="#043764"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
             <ImageView
                 android:id="@+id/profilebutton"
@@ -87,15 +88,15 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginBottom="0dp"
                 android:layout_toStartOf="@+id/Termsbutton"
                 android:paddingEnd="20dp"
                 android:text="Terminos y Condiciones"
                 android:textAlignment="textEnd"
                 android:textColor="#043764"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -128,14 +129,14 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="5dp"
+                android:layout_marginEnd="-1dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toStartOf="@+id/ayudabutton"
                 android:paddingEnd="20dp"
                 android:text="Ayuda"
                 android:textAlignment="textEnd"
                 android:textColor="#043764"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -157,10 +158,9 @@
             android:background="@drawable/linea" />
 
         <RelativeLayout
-            android:id="@+id/button4"
+            android:id="@+id/logOut"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="Button" >
+            android:layout_height="50dp">
 
             <TextView
                 android:id="@+id/textoCerrarS"
@@ -169,14 +169,14 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="5dp"
+                android:layout_marginEnd="-1dp"
                 android:layout_marginBottom="0dp"
                 android:layout_toStartOf="@+id/logoutbutton"
                 android:paddingEnd="20dp"
                 android:text="Cerrar Sesión"
                 android:textAlignment="textEnd"
                 android:textColor="#043764"
-                android:textSize="24sp" />
+                android:textSize="20sp" />
 
             <ImageView
                 android:layout_width="wrap_content"

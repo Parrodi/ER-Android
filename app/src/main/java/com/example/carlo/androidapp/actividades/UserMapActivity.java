@@ -46,6 +46,8 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
 
     private static final float DEFAULT_ZOOM = 13f;
 
+
+
     //vars
     private Boolean mLocationPermissionGranted = true;
     private GoogleMap mMap;

@@ -1,6 +1,7 @@
 package com.example.carlo.androidapp.actividades;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -48,6 +49,16 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     EditText em, psw;
     CallbackManager callbackManager;
 
+    SharedPreferences pref;
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +67,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         AppEventsLogger.activateApp(this);
 
         setContentView(R.layout.activity_login);
+
+        pref = getSharedPreferences("user_details",MODE_PRIVATE);
+
 
         em = (EditText)findViewById(R.id.editTextEmail);
         psw = (EditText)findViewById(R.id.editTextPwd);
@@ -133,8 +147,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         int userid = response.getInt("id");
                         String token = response.getString("token");
                         Intent mintent = new Intent(LoginActivity.this, MapsActivity.class);
-                        mintent.putExtra("userid",userid);
-                        mintent.putExtra("token", token);
+                        /*mintent.putExtra("userid",userid);
+                        mintent.putExtra("token", token);*/
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putInt("userid",userid);
+                        editor.putString("token", token);
+                        editor.apply();
                         startActivity(mintent);
                     }else{
                         Toast.makeText(LoginActivity.this, "Datos de inicio de sesión incorrectos",
@@ -179,8 +197,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             int userid = response.getInt("id");
                             String token = response.getString("token");
                             Intent mintent = new Intent(LoginActivity.this, MapsActivity.class);
-                            mintent.putExtra("userid", userid);
-                            mintent.putExtra("token", token);
+                            /*mintent.putExtra("userid", userid);
+                            mintent.putExtra("token", token);*/
+                            SharedPreferences.Editor editor = pref.edit();
+                            editor.putInt("userid",userid);
+                            editor.putString("token", token);
+                            editor.apply();
                             startActivity(mintent);
                             break;
                         default:

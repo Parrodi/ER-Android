@@ -2,6 +2,7 @@ package com.example.carlo.androidapp.actividades;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -31,6 +32,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class pay_showticket extends AppCompatActivity {
+
+    SharedPreferences prf;
     private static final String TAG = "pay_showticket";
     Intent mintent;
     TextView mdate,thistotal, mtourname;
@@ -53,6 +56,9 @@ public class pay_showticket extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payform4);
+
+        prf = getSharedPreferences("user_details",MODE_PRIVATE);
+
         mintent = getIntent();
         mdate = (TextView)findViewById(R.id.tourDate);
         mtourname = (TextView)findViewById(R.id.tourName);
@@ -74,7 +80,7 @@ public class pay_showticket extends AppCompatActivity {
         layouttypes = (LinearLayout)findViewById(R.id.ticketTypes);
         layoutprices = (LinearLayout)findViewById(R.id.ticketPrices);
         thistotal =(TextView)findViewById(R.id.totalAmount);
-        accesstoken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE0IiwiZW1haWwiOiJjYXJsb3NwYXJyb2RpQGVtYWlsLmNvbSIsInR5cGUiOiJVc2VyIiwiaWF0IjoxNTQyOTIyOTUxfQ.P1yZzKv8fm_OFfkO8JNd3ywM4cKnTaZNWnA7NHf0HEY";
+        accesstoken = prf.getString("token", null);;
         tourid=mintent.getIntExtra("tour_id",0);
         userid = 14;
         unixtimestamp = mintent.getLongExtra("dateselected",0);

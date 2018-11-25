@@ -68,12 +68,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
 
+    SharedPreferences prf;
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
 
     private static final float DEFAULT_ZOOM = 13f;
 
-    private static final String accesstoken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE5IiwiZW1haWwiOiJkQGdtYWkuY29tYyIsInR5cGUiOiJVc2VyIiwiaWF0IjoxNTQyOTIzNDYzfQ.L8bgLtBeJx3EtdZYhLq16obFxRnqtLfrJ8T0WyqtNWc";
+    private static String accesstoken;
 
     int j = 0;
 
@@ -94,12 +95,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ViewPager viewPager;
 
     @Override
+    public void onBackPressed() {
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         listaDeTours = new ArrayList<>();
         listaDePlaces = new ArrayList<>();
         listaDeDates = new ArrayList<>();
+        prf = getSharedPreferences("user_details",MODE_PRIVATE);
+        accesstoken = prf.getString("token", null);
         getLocationPermission();
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);

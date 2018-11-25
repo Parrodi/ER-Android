@@ -2,6 +2,7 @@ package com.example.carlo.androidapp.actividades;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -18,16 +19,32 @@ import com.example.carlo.androidapp.modelos.Tour;
 
 public class OptionsMenuActivity extends Activity {
 
+    SharedPreferences prf;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options_menu);
+
+        prf = getSharedPreferences("user_details",MODE_PRIVATE);
 
         RelativeLayout rl = (RelativeLayout)findViewById(R.id.ayuda);
         rl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(OptionsMenuActivity.this, HelpActivity.class);
+                startActivity(i);
+            }
+        });
+
+        RelativeLayout rl2 = (RelativeLayout)findViewById(R.id.logOut);
+        rl2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(OptionsMenuActivity.this, LoginActivity.class);
+                SharedPreferences.Editor editor = prf.edit();
+                editor.clear();
+                editor.apply();
                 startActivity(i);
             }
         });

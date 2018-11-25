@@ -2,6 +2,7 @@ package com.example.carlo.androidapp.actividades;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -38,7 +39,7 @@ public class TimeIntervaleActivity extends AppCompatActivity {
 
     public static final String TAG = "TimeIntervalActivity";
 
-    private static final String accesstoken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE5IiwiZW1haWwiOiJkQGdtYWkuY29tYyIsInR5cGUiOiJVc2VyIiwiaWF0IjoxNTQyOTIzNDYzfQ.L8bgLtBeJx3EtdZYhLq16obFxRnqtLfrJ8T0WyqtNWc";
+    private static String accesstoken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE5IiwiZW1haWwiOiJkQGdtYWkuY29tYyIsInR5cGUiOiJVc2VyIiwiaWF0IjoxNTQyOTIzNDYzfQ.L8bgLtBeJx3EtdZYhLq16obFxRnqtLfrJ8T0WyqtNWc";
 
     private RequestQueue mRequestQueue;
     String url = "https://er-citytourister.appspot.com/";
@@ -48,6 +49,7 @@ public class TimeIntervaleActivity extends AppCompatActivity {
     Tour tour;
 
     DateInformation dates[];
+    SharedPreferences prf;
 
     List<DateInterval> dateIntervals;
     List<DateInformation> dateInformations;
@@ -63,6 +65,8 @@ public class TimeIntervaleActivity extends AppCompatActivity {
         dateIntervals = new ArrayList<>();
         dateInformations = new ArrayList<>();
 
+        prf = getSharedPreferences("user_details",MODE_PRIVATE);
+        accesstoken = prf.getString("token", null);
 
         tour = (Tour) getIntent().getExtras().getSerializable("tour");
 
