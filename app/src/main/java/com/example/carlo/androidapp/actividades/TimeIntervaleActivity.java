@@ -66,6 +66,7 @@ public class TimeIntervaleActivity extends AppCompatActivity {
 
         tour = (Tour) getIntent().getExtras().getSerializable("tour");
 
+
         dates = tour.getDateInformations();
 
         layoutHorarios = (LinearLayout)findViewById(R.id.layout);
@@ -96,6 +97,8 @@ public class TimeIntervaleActivity extends AppCompatActivity {
                     case R.id.salidas :
                         break;
                     case R.id.menus :
+                        Intent intent = new Intent(TimeIntervaleActivity.this, OptionsMenuActivity.class);
+                        startActivity(intent);
                         break;
                 }
                 return false;

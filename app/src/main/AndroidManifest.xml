@@ -43,7 +43,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".actividades.MainActivity" />
-        <activity android:name=".actividades.LoginActivity" >
+        <activity android:name=".actividades.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -62,25 +62,25 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAKAVsEPYZebHtQG36Bp_Vb3nYLRno5eXM" />
 
-        <activity android:name=".actividades.MapsActivity">
-
-        </activity>
+        <activity android:name=".actividades.MapsActivity" />
         <activity android:name=".actividades.TourDescriptionActivity" />
-        <activity android:name=".actividades.pay_gettickets"/>
+        <activity android:name=".actividades.pay_gettickets" />
         <activity android:name=".actividades.RegisterActivity" />
         <activity android:name=".actividades.pay_getNames" />
         <activity android:name=".actividades.pay_showticket" />
-        <activity android:name=".actividades.pay_getdate">
-        </activity>
+        <activity android:name=".actividades.pay_getdate" />
         <activity
             android:name=".actividades.UserMapActivity"
             android:label="@string/title_activity_user_map" />
         <activity
             android:name=".actividades.PlacePopActivity"
-            android:theme="@style/AppTheme.PopUp">
-        </activity>
-        <activity android:name=".actividades.PlaceDescriptionActivity"/>
-        <activity android:name=".actividades.TimeIntervaleActivity"/>
+            android:theme="@style/AppTheme.PopUp" />
+        <activity android:name=".actividades.PlaceDescriptionActivity" />
+        <activity android:name=".actividades.TimeIntervaleActivity" />
+        <activity
+            android:name=".actividades.OptionsMenuActivity"
+            android:theme="@style/AppTheme.PopUp" />
+        <activity android:name=".actividades.HelpActivity"/>
     </application>
 
 </manifest>

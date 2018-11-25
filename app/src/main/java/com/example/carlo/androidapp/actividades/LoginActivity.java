@@ -171,18 +171,23 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             public void onResponse(JSONObject response) {
                 try {
                     String info = response.getString("info");
-                    if(info.equals("Email already in use")){
-                        basicLogin(email,password);
-                    }else if(info.equals("New user added")){
-                        int userid = response.getInt("id");
-                        String token = response.getString("token");
-                        Intent mintent = new Intent(LoginActivity.this, MapsActivity.class);
-                        mintent.putExtra("userid",userid);
-                        mintent.putExtra("token", token);
-                        startActivity(mintent);
-                    }else
-                        Toast.makeText(LoginActivity.this, "Datos de inicio de sesión incorrectos",
-                            Toast.LENGTH_LONG).show();
+                    switch (info) {
+                        case "Email already in use":
+                            basicLogin(email, password);
+                            break;
+                        case "New user added":
+                            int userid = response.getInt("id");
+                            String token = response.getString("token");
+                            Intent mintent = new Intent(LoginActivity.this, MapsActivity.class);
+                            mintent.putExtra("userid", userid);
+                            mintent.putExtra("token", token);
+                            startActivity(mintent);
+                            break;
+                        default:
+                            Toast.makeText(LoginActivity.this, "Datos de inicio de sesión incorrectos",
+                                    Toast.LENGTH_LONG).show();
+                            break;
+                    }
 
 
                 } catch (JSONException e) {

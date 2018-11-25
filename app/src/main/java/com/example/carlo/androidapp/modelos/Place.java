@@ -5,6 +5,7 @@ import java.net.URL;
 
 public class Place implements Serializable {
 
+    private  int id;
     private String name;
     private String description;
     private int placeTypeId;
@@ -84,5 +85,13 @@ public class Place implements Serializable {
 
     public void setImagesOfPlaces(String[] imagesOfPlaces) {
         this.imagesOfPlaces = imagesOfPlaces;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

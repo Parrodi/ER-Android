@@ -124,20 +124,23 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()){
                     case R.id.tours :
-                        finish();
+                        Intent i = new Intent(UserMapActivity.this, MapsActivity.class);
+                        startActivity(i);
                         break;
                     case R.id.tickets :
                         break;
                     case R.id.mapa :
                         break;
                     case R.id.salidas :
-                        Intent i = new Intent(UserMapActivity.this, TimeIntervaleActivity.class);
+                        Intent in = new Intent(UserMapActivity.this, TimeIntervaleActivity.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("tour", tour);
-                        i.putExtras(bundle);
-                        startActivity(i);
+                        in.putExtras(bundle);
+                        startActivity(in);
                         break;
                     case R.id.menus :
+                        Intent intent = new Intent(UserMapActivity.this, OptionsMenuActivity.class);
+                        startActivity(intent);
                         break;
                 }
                 return false;
@@ -231,8 +234,12 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
             if(markerLocation.equals(placeLocation)) {
                 Intent i = new Intent(UserMapActivity.this, PlacePopActivity.class);
                 Bundle bundle = new Bundle();
+                Bundle bundle2 = new Bundle();
                 bundle.putSerializable("place", p);
+                bundle2.putSerializable("tour", tour);
+                i.putExtra("place_type", p.getPlaceTypeId());
                 i.putExtras(bundle);
+                i.putExtras(bundle2);
                 startActivity(i);
             }
         }

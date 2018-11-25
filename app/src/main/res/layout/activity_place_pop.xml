@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".actividades.PlacePopActivity"
-    android:background="#FCB600">
+    android:background="#FCB600"
+    android:id="@+id/constrainLayout">
 
     <TextView
         android:id="@+id/namePlace"

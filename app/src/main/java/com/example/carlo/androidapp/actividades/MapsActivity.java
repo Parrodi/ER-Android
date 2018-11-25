@@ -1,7 +1,10 @@
 package com.example.carlo.androidapp.actividades;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -65,6 +68,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
 
+
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
 
     private static final float DEFAULT_ZOOM = 13f;
@@ -72,6 +76,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final String accesstoken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE5IiwiZW1haWwiOiJkQGdtYWkuY29tYyIsInR5cGUiOiJVc2VyIiwiaWF0IjoxNTQyOTIzNDYzfQ.L8bgLtBeJx3EtdZYhLq16obFxRnqtLfrJ8T0WyqtNWc";
 
     int j = 0;
+
     //vars
     private Boolean mLocationPermissionGranted = false;
     private GoogleMap mMap;
@@ -107,7 +112,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()){
                     case R.id.tours :
-
                         break;
                     case R.id.tickets :
                         break;
@@ -119,8 +123,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         startActivity(i);
                         break;
                     case R.id.salidas :
+                        Intent intent = new Intent(MapsActivity.this, TimeIntervaleActivity.class);
+                        Bundle bundle2 = new Bundle();
+                        bundle2.putSerializable("tour", listaDeTours.get(j));
+                        intent.putExtras(bundle2);
+                        startActivity(intent);
                         break;
                     case R.id.menus :
+                        Intent in = new Intent(MapsActivity.this, OptionsMenuActivity.class);
+                        Bundle bundle3 = new Bundle();
+                        bundle3.putSerializable("tour", listaDeTours.get(j));
+                        in.putExtras(bundle3);
+                        startActivity(in);
                         break;
                 }
                 return false;
@@ -251,6 +265,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             double longitude = jsonObjectPlaces.getDouble("longitude");
 
                             Place lugar = new Place(name, description, placeType, latitude, longitude);
+                            lugar.setId(jsonObjectPlaces.getInt("id"));
                             lugar.setNarrativeUrl(jsonObjectPlaces.getString("narrative_url"));
                             listaDePlaces.add(lugar);
 
