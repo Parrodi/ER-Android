@@ -1,11 +1,15 @@
 package com.example.carlo.androidapp.actividades;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -17,6 +21,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.carlo.androidapp.R;
 import com.example.carlo.androidapp.adapters.RecyclerViewAdapterPurchase;
 import com.example.carlo.androidapp.modelos.Purchase;
+import com.example.carlo.androidapp.modelos.Tour;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,6 +45,44 @@ public class showPurchaseActivity extends AppCompatActivity {
         userid =pref.getInt("userid",0);
         accesstoken = pref.getString("token",null);
         getPurchases();
+
+        BottomNavigationView menu = (BottomNavigationView) findViewById(R.id.botomNavigation);
+        menu.setSelectedItemId(R.id.tickets);
+        menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.tours :
+                        Intent in = new Intent(showPurchaseActivity.this, MapsActivity.class);
+                        startActivity(in);
+                        break;
+                    case R.id.tickets :
+                        break;
+                    case R.id.mapa :
+                        Intent i = new Intent(showPurchaseActivity.this, UserMapActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("tour", (Tour) getIntent().getExtras().getSerializable("tour"));
+                        i.putExtras(bundle);
+                        startActivity(i);
+                        break;
+                    case R.id.salidas :
+                        Intent intent = new Intent(showPurchaseActivity.this, UserMapActivity.class);
+                        Bundle bundle2 = new Bundle();
+                        bundle2.putSerializable("tour", (Tour) getIntent().getExtras().getSerializable("tour"));
+                        intent.putExtras(bundle2);
+                        startActivity(intent);
+                        break;
+                    case R.id.menus :
+                        Intent mIntent = new Intent(showPurchaseActivity.this, OptionsMenuActivity.class);
+                        Bundle bundle3 = new Bundle();
+                        bundle3.putSerializable("tour", (Tour) getIntent().getExtras().getSerializable("tour"));
+                        mIntent.putExtras(bundle3);
+                        startActivity(mIntent);
+                        break;
+                }
+                return false;
+            }
+        });
 
 
     }

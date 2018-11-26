@@ -1,29 +1,19 @@
 package com.example.carlo.androidapp.actividades;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -38,12 +28,12 @@ import com.example.carlo.androidapp.modelos.DateInformation;
 import com.example.carlo.androidapp.modelos.Place;
 import com.example.carlo.androidapp.modelos.Tour;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -52,7 +42,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -126,6 +115,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     case R.id.tours :
                         break;
                     case R.id.tickets :
+                        Intent mIntent = new Intent(MapsActivity.this, showPurchaseActivity.class);
+                        Bundle bundle1 = new Bundle();
+                        bundle1.putSerializable("tour", listaDeTours.get(j));
+                        mIntent.putExtras(bundle1);
+                        startActivity(mIntent);
                         break;
                     case R.id.mapa :
                         Intent i = new Intent(MapsActivity.this, UserMapActivity.class);
@@ -305,12 +299,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         listaDeTours.add(new Tour(jsonObject.getInt("id"), jsonObject.getString("name"),
                                 new URL(url), jsonObject.getString("description"), lugares, date));
 
-                    } catch (JSONException e) {
+                    } catch (JSONException | MalformedURLException e) {
 
-                        Log.d(TAG, " Valio varriga :V (1) " + e);
+                        Toast.makeText(MapsActivity.this, "Hubo un error de conexión",
+                                Toast.LENGTH_LONG).show();
 
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
                     }
                 }
                 setupViewPager(listaDeTours);
@@ -324,7 +317,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                Log.d(TAG, " Valio varriga :V (2)" + error);
+                Toast.makeText(MapsActivity.this, "Hubo un error de conexión",
+                        Toast.LENGTH_LONG).show();
             }
         }) {
             @Override

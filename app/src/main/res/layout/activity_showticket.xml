@@ -8,9 +8,9 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/boleto"
+        android:layout_above="@+id/botomNavigation"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true">
+        android:background="@drawable/boleto">
 
         <TextView
             android:id="@+id/Tour"
@@ -36,9 +36,9 @@
 
         <TextView
             android:id="@+id/Fecha"
-            android:layout_below="@+id/nombreTour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/nombreTour"
             android:layout_marginStart="50dp"
             android:layout_marginTop="20dp"
             android:text="Fecha"
@@ -57,9 +57,9 @@
 
         <TextView
             android:id="@+id/Pasajeros"
-            android:layout_below="@+id/textoDeFecha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/textoDeFecha"
             android:layout_marginStart="50dp"
             android:layout_marginTop="50dp"
             android:text="Pasajeros"
@@ -67,24 +67,23 @@
             android:textStyle="bold" />
 
         <LinearLayout
+            android:id="@+id/listaPasajeros"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/listaPasajeros"
             android:layout_below="@+id/Pasajeros"
+            android:layout_marginStart="50dp"
             android:layout_marginTop="5dp"
-            android:layout_marginStart="50dp">
+            android:orientation="vertical">
 
 
         </LinearLayout>
 
 
-
         <TextView
             android:id="@+id/Pagado"
-            android:layout_below="@+id/Pasajeros"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/Pasajeros"
             android:layout_marginStart="50dp"
             android:layout_marginTop="120dp"
             android:text="Pagado:"
@@ -95,13 +94,31 @@
             android:id="@+id/button2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/Pagado"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
             android:backgroundTint="#FCB600"
             android:text="DETALLES TOUR"
-            android:layout_below="@+id/Pagado"
-            android:layout_marginTop="30dp"
             android:textColor="#FFFFFF" />
 
     </RelativeLayout>
+
+    <android.support.design.widget.BottomNavigationView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/botomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="0dp"
+        android:background="#fff"
+        app:itemIconTint="@color/nav_item_colors"
+        app:itemTextColor="@color/nav_item_colors"
+        app:menu="@menu/nav_menu">
+
+    </android.support.design.widget.BottomNavigationView>
 
 </RelativeLayout>

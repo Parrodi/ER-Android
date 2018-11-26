@@ -1,12 +1,10 @@
 package com.example.carlo.androidapp.actividades;
 
 import android.content.Intent;
-import android.media.Image;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -63,6 +61,11 @@ public class TourDescriptionActivity extends AppCompatActivity {
                         finish();
                         break;
                     case R.id.tickets :
+                        Intent mIntent = new Intent(TourDescriptionActivity.this, showPurchaseActivity.class);
+                        Bundle bundl = new Bundle();
+                        bundl.putSerializable("tour", tour);
+                        mIntent.putExtras(bundl);
+                        startActivity(mIntent);
                         break;
                     case R.id.mapa :
                         Intent i = new Intent(TourDescriptionActivity.this, UserMapActivity.class);
@@ -80,6 +83,9 @@ public class TourDescriptionActivity extends AppCompatActivity {
                         break;
                     case R.id.menus :
                         Intent intent = new Intent(TourDescriptionActivity.this, OptionsMenuActivity.class);
+                        Bundle bundle3 = new Bundle();
+                        bundle3.putSerializable("tour", tour);
+                        intent.putExtras(bundle3);
                         startActivity(intent);
                         break;
                 }

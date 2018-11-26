@@ -73,6 +73,9 @@ public class OptionsMenuActivity extends Activity {
                         break;
                     case R.id.tickets :
                         Intent tick = new Intent(OptionsMenuActivity.this, showPurchaseActivity.class);
+                        Bundle bundle3 = new Bundle();
+                        bundle3.putSerializable("tour", (Tour) getIntent().getExtras().getSerializable("tour"));
+                        tick.putExtras(bundle3);
                         startActivity(tick);
                         break;
                     case R.id.mapa :
@@ -83,7 +86,7 @@ public class OptionsMenuActivity extends Activity {
                         startActivity(i);
                         break;
                     case R.id.salidas :
-                        Intent intent = new Intent(OptionsMenuActivity.this, UserMapActivity.class);
+                        Intent intent = new Intent(OptionsMenuActivity.this, TimeIntervaleActivity.class);
                         Bundle bundle2 = new Bundle();
                         bundle2.putSerializable("tour", (Tour) getIntent().getExtras().getSerializable("tour"));
                         intent.putExtras(bundle2);

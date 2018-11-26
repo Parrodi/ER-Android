@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
@@ -90,6 +91,11 @@ public class TimeIntervaleActivity extends AppCompatActivity {
                         startActivity(i);
                         break;
                     case R.id.tickets :
+                        Intent mIntent = new Intent(TimeIntervaleActivity.this, showPurchaseActivity.class);
+                        Bundle bundle2 = new Bundle();
+                        bundle2.putSerializable("tour", tour);
+                        mIntent.putExtras(bundle2);
+                        startActivity(mIntent);
                         break;
                     case R.id.mapa :
                         Intent in = new Intent(TimeIntervaleActivity.this, UserMapActivity.class);
@@ -99,9 +105,13 @@ public class TimeIntervaleActivity extends AppCompatActivity {
                         startActivity(in);
                         break;
                     case R.id.salidas :
+
                         break;
                     case R.id.menus :
                         Intent intent = new Intent(TimeIntervaleActivity.this, OptionsMenuActivity.class);
+                        Bundle bundle3 = new Bundle();
+                        bundle3.putSerializable("tour", tour);
+                        intent.putExtras(bundle3);
                         startActivity(intent);
                         break;
                 }
@@ -152,7 +162,8 @@ public class TimeIntervaleActivity extends AppCompatActivity {
 
                     } catch (JSONException e) {
 
-                        Log.d(TAG, " Valio varriga :V (1) " + e);
+                        Toast.makeText(TimeIntervaleActivity.this, "Hubo un error de conexión",
+                                Toast.LENGTH_LONG).show();
 
                     }
                 }
@@ -161,14 +172,13 @@ public class TimeIntervaleActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                Log.d(TAG, " Valio varriga :V (2)" + error);
+                Toast.makeText(TimeIntervaleActivity.this, "Hubo un error de conexión",
+                        Toast.LENGTH_LONG).show();
             }
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
-                // Basic Authentication
-                //String auth = "Basic " + Base64.encodeToString(CONSUMER_KEY_AND_SECRET.getBytes(), Base64.NO_WRAP);
 
                 headers.put("auth", accesstoken);
                 return headers;
@@ -219,7 +229,8 @@ public class TimeIntervaleActivity extends AppCompatActivity {
 
                     } catch (JSONException e) {
 
-                        Log.d(TAG, " Valio varriga :V (1) " + e);
+                        Toast.makeText(TimeIntervaleActivity.this, "Hubo un error de conexión",
+                                Toast.LENGTH_LONG).show();
 
                     }
                 }
@@ -228,7 +239,8 @@ public class TimeIntervaleActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                Log.d(TAG, " Valio varriga :V (2)" + error);
+                Toast.makeText(TimeIntervaleActivity.this, "Hubo un error de conexión",
+                        Toast.LENGTH_LONG).show();
             }
         }) {
             @Override

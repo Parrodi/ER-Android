@@ -130,6 +130,11 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
                         startActivity(i);
                         break;
                     case R.id.tickets :
+                        Intent mIntent = new Intent(UserMapActivity.this, showPurchaseActivity.class);
+                        Bundle bundl = new Bundle();
+                        bundl.putSerializable("tour", tour);
+                        mIntent.putExtras(bundl);
+                        startActivity(mIntent);
                         break;
                     case R.id.mapa :
                         break;
@@ -142,6 +147,9 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
                         break;
                     case R.id.menus :
                         Intent intent = new Intent(UserMapActivity.this, OptionsMenuActivity.class);
+                        Bundle bundle3 = new Bundle();
+                        bundle3.putSerializable("tour", tour);
+                        intent.putExtras(bundle3);
                         startActivity(intent);
                         break;
                 }

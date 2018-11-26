@@ -1,16 +1,14 @@
 package com.example.carlo.androidapp.actividades;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.carlo.androidapp.R;
-import com.example.carlo.androidapp.adapters.ImageAdapter;
 import com.example.carlo.androidapp.modelos.Place;
 import com.example.carlo.androidapp.modelos.Tour;
 
@@ -46,6 +44,11 @@ public class PlaceDescriptionActivity extends AppCompatActivity {
                         startActivity(i);
                         break;
                     case R.id.tickets :
+                        Intent mIntent = new Intent(PlaceDescriptionActivity.this, showPurchaseActivity.class);
+                        Bundle bundle2 = new Bundle();
+                        bundle2.putSerializable("tour", tour);
+                        mIntent.putExtras(bundle2);
+                        startActivity(mIntent);
                         break;
                     case R.id.mapa :
                         finish();
@@ -60,6 +63,9 @@ public class PlaceDescriptionActivity extends AppCompatActivity {
                         break;
                     case R.id.menus :
                         Intent intent = new Intent(PlaceDescriptionActivity.this, OptionsMenuActivity.class);
+                        Bundle bundle3 = new Bundle();
+                        bundle3.putSerializable("tour", tour);
+                        intent.putExtras(bundle3);
                         startActivity(intent);
                         break;
                 }
