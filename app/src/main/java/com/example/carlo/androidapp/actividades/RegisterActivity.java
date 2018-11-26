@@ -2,6 +2,7 @@ package com.example.carlo.androidapp.actividades;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -50,6 +51,8 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     TextView em, nom, tel, psw1, psw2;
     CheckBox terminosycondiciones;
     CallbackManager callbackManager;
+    SharedPreferences pref;
+    Intent mintent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +74,8 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
         callbackManager = CallbackManager.Factory.create();
+        pref = getSharedPreferences("user_details",MODE_PRIVATE);
+        mintent = new Intent(RegisterActivity.this, MapsActivity.class);
 
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
@@ -167,9 +172,10 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                     if(info.equals("Login success")){
                         int userid = response.getInt("id");
                         String token = response.getString("token");
-                        Intent mintent = new Intent(RegisterActivity.this, MapsActivity.class);
-                        mintent.putExtra("userid",userid);
-                        mintent.putExtra("token", token);
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putInt("userid",userid);
+                        editor.putString("token", token);
+                        editor.apply();
                         startActivity(mintent);
                     }else addUser(name,email,password, "");
 
@@ -209,9 +215,10 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                     }else if(info.equals("New user added")){
                         int userid = response.getInt("id");
                         String token = response.getString("token");
-                        Intent mintent = new Intent(RegisterActivity.this, MapsActivity.class);
-                        mintent.putExtra("userid",userid);
-                        mintent.putExtra("token", token);
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putInt("userid",userid);
+                        editor.putString("token", token);
+                        editor.apply();
                         Toast.makeText(RegisterActivity.this, "Nuevo usuario agregado!",
                                 Toast.LENGTH_LONG).show();
                         startActivity(mintent);

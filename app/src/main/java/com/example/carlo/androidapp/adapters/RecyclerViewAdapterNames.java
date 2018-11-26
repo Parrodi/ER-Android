@@ -20,12 +20,12 @@ import java.util.ArrayList;
 
 public class RecyclerViewAdapterNames extends RecyclerView.Adapter<RecyclerViewAdapterNames.ViewHolder> {
     private static final String TAG = "RecyclerViewAdapterName";
-    private ArrayList<String> ticketTypes = new ArrayList<>();
-    private ArrayList<Integer> ticketCount = new ArrayList<>();
+    private ArrayList<String> ticketTypes;
+    private ArrayList<Integer> ticketCount;
     private ArrayList<String> names = new ArrayList<>();
     private ArrayList<Integer> ages = new ArrayList<>();
-    private ArrayList<String> ticketType = new ArrayList<>();
-    private ArrayList<Integer> countTicketType = new ArrayList<>();
+    private ArrayList<String> ticketType;
+    private ArrayList<Integer> countTicketType;
     private Context mContext;
     private long unixtimestamp;
     private Intent mintent;

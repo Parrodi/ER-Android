@@ -3,10 +3,9 @@ package com.example.carlo.androidapp.actividades;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -73,6 +72,8 @@ public class OptionsMenuActivity extends Activity {
                         startActivity(in);
                         break;
                     case R.id.tickets :
+                        Intent tick = new Intent(OptionsMenuActivity.this, showPurchaseActivity.class);
+                        startActivity(tick);
                         break;
                     case R.id.mapa :
                         Intent i = new Intent(OptionsMenuActivity.this, UserMapActivity.class);

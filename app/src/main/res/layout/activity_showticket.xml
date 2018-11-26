@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/Fecha"
             android:layout_marginStart="50dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="2dp"
             android:text="Nombre de Destino"
             android:textColor="#043764" />
 
@@ -66,15 +66,19 @@
             android:textColor="#E21181"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/textoPasajeros"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/listaPasajeros"
             android:layout_below="@+id/Pasajeros"
-            android:layout_marginStart="50dp"
             android:layout_marginTop="5dp"
-            android:text="pasajeros text"
-            android:textColor="#043764" />
+            android:layout_marginStart="50dp">
+
+
+        </LinearLayout>
+
+
 
         <TextView
             android:id="@+id/Pagado"
@@ -83,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
             android:layout_marginTop="120dp"
-            android:text="Pagado"
+            android:text="Pagado:"
             android:textColor="#E21181"
             android:textStyle="bold" />
 

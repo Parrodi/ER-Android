@@ -82,13 +82,9 @@ public class pay_showticket extends AppCompatActivity {
         thistotal =(TextView)findViewById(R.id.totalAmount);
         accesstoken = prf.getString("token", null);;
         tourid=mintent.getIntExtra("tour_id",0);
-        userid = 14;
+        userid = prf.getInt("userid",0);
         unixtimestamp = mintent.getLongExtra("dateselected",0);
         datasize = mintent.getIntExtra("datasize",0);
-        for(int i=0; i<datasize; i++){
-            Log.d(TAG,names.get(i));
-            Log.d(TAG, ages.get(i) + "");
-        }
         Log.d(TAG, "date: " + unixtimestamp);
         Date date = new java.util.Date(unixtimestamp*1000L);
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");

@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     TextView textview, registro;
     EditText em, psw;
     CallbackManager callbackManager;
-
+    Intent mintent;
     SharedPreferences pref;
 
     @Override
@@ -67,8 +67,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         AppEventsLogger.activateApp(this);
 
         setContentView(R.layout.activity_login);
+        mintent = new Intent(LoginActivity.this,MapsActivity.class);
 
         pref = getSharedPreferences("user_details",MODE_PRIVATE);
+        if(pref.contains("userid")&&pref.contains("token"))
+            startActivity(mintent);
 
 
         em = (EditText)findViewById(R.id.editTextEmail);
@@ -80,7 +83,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             @Override
             public void onClick(View v){
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                startActivity(mintent);
             }
         });
         callbackManager = CallbackManager.Factory.create();
@@ -146,9 +149,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     if(info.equals("Login success")){
                         int userid = response.getInt("id");
                         String token = response.getString("token");
-                        Intent mintent = new Intent(LoginActivity.this, MapsActivity.class);
-                        /*mintent.putExtra("userid",userid);
-                        mintent.putExtra("token", token);*/
                         SharedPreferences.Editor editor = pref.edit();
                         editor.putInt("userid",userid);
                         editor.putString("token", token);
@@ -196,9 +196,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         case "New user added":
                             int userid = response.getInt("id");
                             String token = response.getString("token");
-                            Intent mintent = new Intent(LoginActivity.this, MapsActivity.class);
-                            /*mintent.putExtra("userid", userid);
-                            mintent.putExtra("token", token);*/
                             SharedPreferences.Editor editor = pref.edit();
                             editor.putInt("userid",userid);
                             editor.putString("token", token);
@@ -250,10 +247,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             //String name = acct.getFamilyName();
             //String email = acct.getEmail();
             //String personId = acct.getId();
-            // textview.setText(name);
             //new AddManager().execute("http://ertourister.appspot.com/user/add", name, email, personId);
-            Intent i = new Intent(LoginActivity.this, MapsActivity.class);
-            startActivity(i);
+            startActivity(mintent);
 
 
         }else Toast.makeText(LoginActivity.this, "Failed sign in Google",
