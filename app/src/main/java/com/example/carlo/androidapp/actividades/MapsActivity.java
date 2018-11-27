@@ -25,6 +25,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.carlo.androidapp.R;
 import com.example.carlo.androidapp.adapters.ViewPagerAdapter;
 import com.example.carlo.androidapp.modelos.DateInformation;
+import com.example.carlo.androidapp.modelos.ImageOfPlace;
 import com.example.carlo.androidapp.modelos.Place;
 import com.example.carlo.androidapp.modelos.Tour;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -296,8 +297,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         Place lugares[] = new Place[listaDePlaces.size()];
                         lugares = listaDePlaces.toArray(lugares);
 
-                        listaDeTours.add(new Tour(jsonObject.getInt("id"), jsonObject.getString("name"),
-                                new URL(url), jsonObject.getString("description"), lugares, date));
+                        int id = jsonObject.getInt("id");
+                        String name = jsonObject.getString("name");
+                        String description = jsonObject.getString("description");
+                        listaDeTours.add(new Tour(id, name, new URL(url), description, lugares, date));
 
                     } catch (JSONException | MalformedURLException e) {
 
@@ -307,11 +310,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 }
                 setupViewPager(listaDeTours);
-                Tour tour = listaDeTours.get(0);
+                /*Tour tour = listaDeTours.get(0);
                 Place place[] = tour.getPlaces();
                 for (Place p : place) {
                     makeMarker(new LatLng(p.getLatitude(), p.getLongitude()), tour.getDescription(), p.getPlaceTypeId());
-                }
+                }*/
             }
         }, new Response.ErrorListener() {
             @Override

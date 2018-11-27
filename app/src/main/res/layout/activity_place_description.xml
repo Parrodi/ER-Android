@@ -5,11 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".actividades.PlaceDescriptionActivity"
-    android:background="#404040">
+    android:background="#fff">
 
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/botomNavigation"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:textColor="#fff"
+                android:textColor="#404040"
                 android:textSize="20sp" />
 
             <android.support.v4.view.ViewPager
@@ -39,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:textColor="#fff"
+                android:textColor="#404040"
                 android:textSize="15sp" />
 
         </LinearLayout>

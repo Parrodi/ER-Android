@@ -44,7 +44,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private GoogleApiClient googleApiClient;
     private static final int SIGN_IN_CODE = 777;
 
-
     TextView textview, registro;
     EditText em, psw;
     CallbackManager callbackManager;
@@ -56,8 +55,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onBackPressed();
         finish();
     }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +80,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             @Override
             public void onClick(View v){
-                startActivity(mintent);
+                Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(i);
             }
         });
         callbackManager = CallbackManager.Factory.create();
@@ -136,6 +134,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
 
     public void basicLogin(String email, String password) throws JSONException {
+        final boolean testResponse = false, finishedRequest=false;
         final RequestQueue loginqueue = Volley.newRequestQueue(this);
         String url = "https://er-citytourister.appspot.com/user/login";
         JSONObject postparams = new JSONObject();
@@ -159,8 +158,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 Toast.LENGTH_LONG).show();
                     }
 
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -169,10 +166,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("Login", "Entro al error login");
+                Toast.makeText(LoginActivity.this, "Hubo un error con el servidor",
+                        Toast.LENGTH_LONG).show();
                 error.printStackTrace();
             }
         });
+
         loginqueue.add(loginrequest);
     }
 
@@ -248,7 +247,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             //String email = acct.getEmail();
             //String personId = acct.getId();
             //new AddManager().execute("http://ertourister.appspot.com/user/add", name, email, personId);
-            startActivity(mintent);
+            //startActivity(mintent);
 
 
         }else Toast.makeText(LoginActivity.this, "Failed sign in Google",

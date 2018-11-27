@@ -14,12 +14,13 @@ public class inputFormatAuthentication {
 
     public static boolean isNameValid(String name){
         int size = 0;
-        if(name.length() > 100 || name.length() == 0)
+        if(name.length() > 100)
             return false;
         while(name.length() > size){
             if(name.charAt(size) == 32){
-                if(name.charAt(size+1) == 32)
+                if(name.charAt(size+1) == 32){
                     return false;
+                }else size++;
             }else if(name.charAt(size) > 64 && name.charAt(size) < 123){
                 size++;
             }else return false;
