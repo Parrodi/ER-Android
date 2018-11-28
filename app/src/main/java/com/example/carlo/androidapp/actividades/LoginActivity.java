@@ -153,6 +153,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         editor.putString("token", token);
                         editor.putString("useremail", email);
                         editor.apply();
+                        Toast.makeText(LoginActivity.this, "Se inició sesión de manera correcta!",
+                                Toast.LENGTH_LONG).show();
                         startActivity(mintent);
                     }else{
                         Toast.makeText(LoginActivity.this, "Datos de inicio de sesión incorrectos",
@@ -202,6 +204,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             editor.putString("token", token);
                             editor.putString("useremail",email);
                             editor.apply();
+                            Toast.makeText(LoginActivity.this, "Se inició sesión de manera correcta!",
+                                    Toast.LENGTH_LONG).show();
                             startActivity(mintent);
                             break;
                         default:

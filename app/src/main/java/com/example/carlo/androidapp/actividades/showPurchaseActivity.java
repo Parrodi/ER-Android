@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -94,31 +95,39 @@ public class showPurchaseActivity extends AppCompatActivity {
         final JsonArrayRequest requestPurchases = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length(); i++) {
-                    try {
-                        JSONObject purchase = response.getJSONObject(i);
-                        int id = purchase.getInt("id");
-                        long unixtime = purchase.getLong("date_tour");
-                        Purchase actualpurchase = new Purchase(id,unixtime);
-                        actualpurchase.setTotal(purchase.getDouble("total"));
-                        JSONArray tickets = purchase.getJSONArray("tickets");
-                        JSONObject firstticket = tickets.getJSONObject(0);
-                        int priceid = firstticket.getInt("price_id");
-                        for (int j=0;j<tickets.length();j++){
-                            JSONObject ticket = tickets.getJSONObject(j);
-                            actualpurchase.addCountToMap(ticket.getString("name"));
+                if(response.length()>0) {
+                    for (int i = 0; i < response.length(); i++) {
+                        try {
+                            JSONObject purchase = response.getJSONObject(i);
+                            int id = purchase.getInt("id");
+                            long unixtime = purchase.getLong("date_tour");
+                            Purchase actualpurchase = new Purchase(id, unixtime);
+                            actualpurchase.setTotal(purchase.getDouble("total"));
+                            JSONArray tickets = purchase.getJSONArray("tickets");
+                            JSONObject firstticket = tickets.getJSONObject(0);
+                            int priceid = firstticket.getInt("price_id");
+                            for (int j = 0; j < tickets.length(); j++) {
+                                JSONObject ticket = tickets.getJSONObject(j);
+                                actualpurchase.addCountToMap(ticket.getString("name"));
+                            }
+                            purchases.add(actualpurchase);
+                            getPurchaseTourname(i, priceid);
+                        } catch (JSONException e) {
+                            Toast.makeText(showPurchaseActivity.this, "Hubo un problema al obtener información del servidor",
+                                    Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
                         }
-                        purchases.add(actualpurchase);
-                        getPurchaseTourname(i,priceid);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
-                }
+                }else
+                    Toast.makeText(showPurchaseActivity.this, "Aún no hay compras para mostrar",
+                            Toast.LENGTH_LONG).show();
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Toast.makeText(showPurchaseActivity.this, "Hubo un error al conectarse con el servidor",
+                        Toast.LENGTH_LONG).show();
                 error.printStackTrace();
             }
         }){
@@ -147,12 +156,16 @@ public class showPurchaseActivity extends AppCompatActivity {
                     if(index == purchases.size()-1)
                         initRecyclerView();
                 } catch (JSONException e) {
+                    Toast.makeText(showPurchaseActivity.this, "Hubo un problema al obtener información del servidor",
+                            Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Toast.makeText(showPurchaseActivity.this, "Hubo un error al conectarse con el servidor",
+                        Toast.LENGTH_LONG).show();
                 error.printStackTrace();
             }
         }){
