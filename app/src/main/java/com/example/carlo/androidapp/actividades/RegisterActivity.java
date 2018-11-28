@@ -22,7 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.carlo.androidapp.R;
-import com.example.carlo.androidapp.adapters.inputFormatAuthentication;
+import com.example.carlo.androidapp.adapters.InputFormatAuthentication;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -263,7 +263,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         String message;
 
 
-        if (inputFormatAuthentication.isEmailValid(email.getText().toString())){
+        if (InputFormatAuthentication.isEmailValid(email.getText().toString())){
             em.setTextColor(Color.parseColor("#707070"));
         }else {
             email.setText("");
@@ -271,7 +271,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
             correctinput = false;
         }
 
-        if (inputFormatAuthentication.passwordsMatch(pswd.getText().toString(), pswdc.getText().toString())){
+        if (InputFormatAuthentication.passwordsMatch(pswd.getText().toString(), pswdc.getText().toString())){
             psw1.setTextColor(Color.parseColor("#707070"));
             psw2.setTextColor(Color.parseColor("#707070"));
         }else {
@@ -282,7 +282,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
             correctinput = false;
         }
 
-        if (inputFormatAuthentication.isNameValid(name.getText().toString())){
+        if (InputFormatAuthentication.isNameValid(name.getText().toString())){
             nom.setTextColor(Color.parseColor("#707070"));
         }else {
             name.setText("");
@@ -290,7 +290,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
             correctinput = false;
         }
 
-        if (inputFormatAuthentication.isNumberValid(phone.getText().toString())){
+        if (InputFormatAuthentication.isNumberValid(phone.getText().toString())){
             tel.setTextColor(Color.parseColor("#707070"));
         }else {
             phone.setText("");

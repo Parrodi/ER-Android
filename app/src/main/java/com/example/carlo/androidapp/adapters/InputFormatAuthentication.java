@@ -1,11 +1,12 @@
 package com.example.carlo.androidapp.adapters;
 
+import android.text.TextUtils;
 import android.util.Patterns;
 
-public class inputFormatAuthentication {
+public class InputFormatAuthentication {
 
     public static boolean isEmailValid(String email) {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        return (!email.equals("")  && Patterns.EMAIL_ADDRESS.matcher(email).matches());
     }
 
     public static boolean passwordsMatch(String psw1, String pswd2) {
@@ -13,11 +14,15 @@ public class inputFormatAuthentication {
     }
 
     public static boolean isNameValid(String name){
+        if(name.length() == 0){
+            return false;
+        }
         int size = 0;
-        if(name.length() > 100)
+        if(name.length() > 200)
             return false;
         while(name.length() > size){
             if(name.charAt(size) == 32){
+                if(size == 0){return false;}
                 if(name.charAt(size+1) == 32){
                     return false;
                 }else size++;
@@ -29,6 +34,9 @@ public class inputFormatAuthentication {
     }
 
     public static boolean isNumberValid(String phone){
-        return phone.length() > 9 && phone.length() < 15 && Patterns.PHONE.matcher(phone).matches() || phone.equals("");
+        if(phone.length() > 9 && phone.length() < 15 && Patterns.PHONE.matcher(phone).matches() && !phone.equals("")){
+            return true;
+        }else
+        return false;
     }
 }

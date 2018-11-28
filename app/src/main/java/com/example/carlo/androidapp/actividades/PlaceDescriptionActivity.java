@@ -6,11 +6,13 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.carlo.androidapp.R;
 import com.example.carlo.androidapp.modelos.Place;
 import com.example.carlo.androidapp.modelos.Tour;
+import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
@@ -29,9 +31,14 @@ public class PlaceDescriptionActivity extends AppCompatActivity {
 
         TextView placeName = (TextView)findViewById(R.id.namePlace);
         TextView placeDescription = (TextView)findViewById(R.id.placeDescription);
+        ImageView placeImage =(ImageView)findViewById(R.id.placeImage);
 
         placeName.setText(place.getName());
         placeDescription.setText(place.getDescription());
+
+        if(place.getImageUrl() != null) {
+            Picasso.with(this).load(place.getImageUrl()).into(placeImage);
+        }
 
         BottomNavigationView menu = (BottomNavigationView) findViewById(R.id.botomNavigation);
         menu.setSelectedItemId(R.id.mapa);
@@ -72,10 +79,6 @@ public class PlaceDescriptionActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-        /*ViewPager viewPager = findViewById(R.id.viewPager);
-        ImageAdapter adapter = new ImageAdapter(this, place.getImagesOfPlaces());
-        viewPager.setAdapter(adapter);*/
 
     }
 }

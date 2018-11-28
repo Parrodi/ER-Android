@@ -44,9 +44,7 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
 
-    private static final float DEFAULT_ZOOM = 13f;
-
-
+    private static final float DEFAULT_ZOOM = 10f;
 
     //vars
     private Boolean mLocationPermissionGranted = true;
@@ -54,6 +52,9 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
     private Tour tour;
+    private boolean camaraMove = false;
+
+    private Button puntosDeInteres;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +64,7 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
 
         tour = (Tour)Objects.requireNonNull(getIntent().getExtras()).getSerializable("tour");
 
-        final Button puntosDeInteres = (Button)findViewById(R.id.buttonPI);
+        puntosDeInteres = (Button)findViewById(R.id.buttonPI);
         final Button parada = (Button)findViewById(R.id.buttonParada);
         final Button recomendacion = (Button) findViewById(R.id.buttonRec);
 
@@ -71,6 +72,12 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
             @Override
             public void onClick(View v) {
                 mMap.clear();
+                if(!camaraMove){
+                    Place places[] = tour.getPlaces();
+                    Place p = places[0];
+                    moveCamera(new LatLng(p.getLatitude(), p.getLongitude()), DEFAULT_ZOOM);
+                    camaraMove = true;
+                }
                 puntosDeInteres.setBackground(getDrawable(R.drawable.presspuntointeresbtn));
                 parada.setBackground(getDrawable(R.drawable.paradasbtn));
                 recomendacion.setBackground(getDrawable(R.drawable.recomendacionesbtn));
@@ -93,7 +100,7 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
                 puntosDeInteres.setBackground(getDrawable(R.drawable.puntodeinteresbtn));
                 recomendacion.setBackground(getDrawable(R.drawable.recomendacionesbtn));
                 for(Place p : tour.getPlaces()){
-                    if(p.getPlaceTypeId() == 2) {
+                    if(p.getPlaceTypeId() == 3) {
                         LatLng location = new LatLng(p.getLatitude(), p.getLongitude());
                         String name = p.getName();
                         mMap.addMarker(new MarkerOptions().position(location).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.pinparada)));
@@ -110,7 +117,7 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
                 parada.setBackground(getDrawable(R.drawable.paradasbtn));
                 puntosDeInteres.setBackground(getDrawable(R.drawable.puntodeinteresbtn));
                 for(Place p : tour.getPlaces()){
-                    if(p.getPlaceTypeId() == 3) {
+                    if(p.getPlaceTypeId() == 2) {
                         LatLng location = new LatLng(p.getLatitude(), p.getLongitude());
                         String name = p.getName();
                         mMap.addMarker(new MarkerOptions().position(location).title(name).icon(BitmapDescriptorFactory.fromResource(R.drawable.pinrecomendacion)));
@@ -156,6 +163,7 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
                 return false;
             }
         });
+
     }
     /**
      * Manipulates the map once available.

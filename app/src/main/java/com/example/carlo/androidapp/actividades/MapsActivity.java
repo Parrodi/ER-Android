@@ -25,7 +25,6 @@ import com.android.volley.toolbox.Volley;
 import com.example.carlo.androidapp.R;
 import com.example.carlo.androidapp.adapters.ViewPagerAdapter;
 import com.example.carlo.androidapp.modelos.DateInformation;
-import com.example.carlo.androidapp.modelos.ImageOfPlace;
 import com.example.carlo.androidapp.modelos.Place;
 import com.example.carlo.androidapp.modelos.Tour;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -62,7 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
 
-    private static final float DEFAULT_ZOOM = 13f;
+    private static final float DEFAULT_ZOOM = 10f;
 
     private static String accesstoken;
 
@@ -274,6 +273,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             Place lugar = new Place(name, description, placeType, latitude, longitude);
                             lugar.setId(jsonObjectPlaces.getInt("id"));
                             lugar.setNarrativeUrl(jsonObjectPlaces.getString("narrative_url"));
+                            lugar.setImageUrl(jsonObjectPlaces.getString("image_url"));
                             listaDePlaces.add(lugar);
 
                         }
@@ -310,11 +310,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 }
                 setupViewPager(listaDeTours);
-                /*Tour tour = listaDeTours.get(0);
-                Place place[] = tour.getPlaces();
-                for (Place p : place) {
-                    makeMarker(new LatLng(p.getLatitude(), p.getLongitude()), tour.getDescription(), p.getPlaceTypeId());
-                }*/
             }
         }, new Response.ErrorListener() {
             @Override
@@ -359,6 +354,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         for (Place p : place) {
             makeMarker(new LatLng(p.getLatitude(), p.getLongitude()), tour.getDescription(), p.getPlaceTypeId());
         }
+        moveCamera(new LatLng(place[0].getLatitude(), place[0].getLongitude()), DEFAULT_ZOOM);
     }
 
     private void makeMarker(LatLng latLng, String description, int placeTypeId) {

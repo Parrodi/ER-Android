@@ -12,7 +12,7 @@ public class Place implements Serializable {
     private double latitude;
     private double longitude;
     private String narrativeUrl;
-    private String[] imagesOfPlaces;
+    private String imageUrl;
     private Tour[] tours;
 
     public Place(String name, String description, int placeTypeId, double latitude, double longitude) {
@@ -79,19 +79,19 @@ public class Place implements Serializable {
         this.tours = tours;
     }
 
-    public String[] getImagesOfPlaces() {
-        return imagesOfPlaces;
-    }
-
-    public void setImagesOfPlaces(String[] imagesOfPlaces) {
-        this.imagesOfPlaces = imagesOfPlaces;
-    }
-
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
