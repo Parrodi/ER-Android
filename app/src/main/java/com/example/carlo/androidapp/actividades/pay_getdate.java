@@ -1,19 +1,21 @@
 package com.example.carlo.androidapp.actividades;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CalendarView;
-import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.carlo.androidapp.R;
 
 import java.util.Calendar;
 
 public class pay_getdate extends AppCompatActivity {
-    private CalendarView mCalendar;
-    private TextView txt;
+    SharedPreferences pref;
+    EditText txt;
     private long date;
     private int tourid;
     Intent mintent;
@@ -23,8 +25,10 @@ public class pay_getdate extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payform1);
-        mCalendar = (CalendarView)findViewById(R.id.MyCalendar);
-        txt = (TextView)findViewById(R.id.textEscribeEmail);
+        pref = getSharedPreferences("user_details",MODE_PRIVATE);
+        CalendarView mCalendar = (CalendarView) findViewById(R.id.MyCalendar);
+        txt = (EditText) findViewById(R.id.correoFormaPago);
+        txt.setText(pref.getString("useremail",""));
         mCalendar.setMinDate(mCalendar.getDate());
         mintent = getIntent();
         tourid = mintent.getIntExtra("tour_id", 0);
@@ -47,11 +51,16 @@ public class pay_getdate extends AppCompatActivity {
     }
 
     public void dateSelected(View V){
-        Intent i = new Intent(pay_getdate.this, pay_gettickets.class);
-        i.putExtra("dateselected",date);
-        i.putExtra("tour_id",tourid);
-        startActivity(i);
-
+        String text = txt.getText().toString();
+        if(text.equals(""))
+            Toast.makeText(pay_getdate.this, "Falta llenar el campo del correo",
+                    Toast.LENGTH_LONG).show();
+        else{
+            Intent i = new Intent(pay_getdate.this, pay_gettickets.class);
+            i.putExtra("dateselected",date);
+            i.putExtra("tour_id",tourid);
+            startActivity(i);
+        }
 
     }
 

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -52,8 +51,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
     }
 
     @Override
@@ -99,7 +100,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             addUserSocialNetworks(name,email,password);
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            Toast.makeText(LoginActivity.this, "Failed to get parameters from Facebook",
+                            Toast.makeText(LoginActivity.this, "Error al conseguir datos de Facebook",
                                     Toast.LENGTH_LONG).show();
                         }
 
@@ -117,7 +118,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             @Override
             public void onError(FacebookException exception) {
-                Toast.makeText(LoginActivity.this, "Facebook Error",
+                Toast.makeText(LoginActivity.this, "Falló la conexión con Facebook",
                         Toast.LENGTH_LONG).show();
             }
         });
@@ -132,8 +133,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .build();
     }
 
-
-    public void basicLogin(String email, String password) throws JSONException {
+    public void basicLogin(final String email, String password) throws JSONException {
         final boolean testResponse = false, finishedRequest=false;
         final RequestQueue loginqueue = Volley.newRequestQueue(this);
         String url = "https://er-citytourister.appspot.com/user/login";
@@ -151,6 +151,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         SharedPreferences.Editor editor = pref.edit();
                         editor.putInt("userid",userid);
                         editor.putString("token", token);
+                        editor.putString("useremail", email);
                         editor.apply();
                         startActivity(mintent);
                     }else{
@@ -159,6 +160,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     }
 
                 } catch (JSONException e) {
+                    Toast.makeText(LoginActivity.this, "Hubo un error al obtener información del servidor",
+                            Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
 
@@ -166,7 +169,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(LoginActivity.this, "Hubo un error con el servidor",
+                Toast.makeText(LoginActivity.this, "Hubo un error al conectarse con el servidor",
                         Toast.LENGTH_LONG).show();
                 error.printStackTrace();
             }
@@ -174,7 +177,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         loginqueue.add(loginrequest);
     }
-
 
     public void addUserSocialNetworks(String name, final String email, final String password) throws JSONException {
         RequestQueue addqueue = Volley.newRequestQueue(this);
@@ -198,17 +200,20 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             SharedPreferences.Editor editor = pref.edit();
                             editor.putInt("userid",userid);
                             editor.putString("token", token);
+                            editor.putString("useremail",email);
                             editor.apply();
                             startActivity(mintent);
                             break;
                         default:
-                            Toast.makeText(LoginActivity.this, "Datos de inicio de sesión incorrectos",
+                            Toast.makeText(LoginActivity.this, "No se pudo agregar el usuario al sistema",
                                     Toast.LENGTH_LONG).show();
                             break;
                     }
 
 
                 } catch (JSONException e) {
+                    Toast.makeText(LoginActivity.this, "Hubo un error al intentar agregar el usuario",
+                            Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
 
@@ -216,12 +221,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Toast.makeText(LoginActivity.this, "Hubo un error al conectarse con el servidor",
+                        Toast.LENGTH_LONG).show();
                 error.printStackTrace();
             }
         });
         addqueue.add(addrequest);
     }
-
 
     // Manages the results from FB and Google connections
     @Override
@@ -250,20 +256,21 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             //startActivity(mintent);
 
 
-        }else Toast.makeText(LoginActivity.this, "Failed sign in Google",
+        }else Toast.makeText(LoginActivity.this, "Hubo un problema al iniciar sesión con Google",
                 Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Toast.makeText(LoginActivity.this, "Falló la conexión con Google",
+                Toast.LENGTH_LONG).show();
     }
-
 
     //Calls the method to begin a connection with FB
     public void fbLogin(View v){
         LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile"));
     }
+
     public void gLogin(View v){
         Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(intent, SIGN_IN_CODE);

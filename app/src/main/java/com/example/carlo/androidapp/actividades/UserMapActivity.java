@@ -4,11 +4,11 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.MenuItem;
@@ -31,8 +31,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-
-import java.util.Objects;
 
 public class UserMapActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -62,7 +60,7 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
         setContentView(R.layout.activity_user_map);
         getLocationPermission();
 
-        tour = (Tour)Objects.requireNonNull(getIntent().getExtras()).getSerializable("tour");
+        tour = (Tour)getIntent().getExtras().getSerializable("tour");
 
         puntosDeInteres = (Button)findViewById(R.id.buttonPI);
         final Button parada = (Button)findViewById(R.id.buttonParada);

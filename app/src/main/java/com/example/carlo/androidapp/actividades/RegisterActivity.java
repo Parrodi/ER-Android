@@ -157,7 +157,6 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         }
     }
 
-
     public void loginSocialNetworks(final String name, final String email, final String password) throws JSONException {
         RequestQueue loginqueue = Volley.newRequestQueue(this);
         String url = "https://er-citytourister.appspot.com/user/login";
@@ -175,6 +174,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                         SharedPreferences.Editor editor = pref.edit();
                         editor.putInt("userid",userid);
                         editor.putString("token", token);
+                        editor.putString("useremail",email);
                         editor.apply();
                         startActivity(mintent);
                     }else addUser(name,email,password, "");
@@ -193,7 +193,6 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         });
         loginqueue.add(loginrequest);
     }
-
 
     public void addUser(String name, final String email, final String password, String phone) throws JSONException {
         RequestQueue addqueue = Volley.newRequestQueue(this);
@@ -218,6 +217,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                         SharedPreferences.Editor editor = pref.edit();
                         editor.putInt("userid",userid);
                         editor.putString("token", token);
+                        editor.putString("useremail",email);
                         editor.apply();
                         Toast.makeText(RegisterActivity.this, "Nuevo usuario agregado!",
                                 Toast.LENGTH_LONG).show();
@@ -228,6 +228,8 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
 
                 } catch (JSONException e) {
+                    Toast.makeText(RegisterActivity.this, "Hubo un error al obtener información del servidor",
+                            Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
 
@@ -235,13 +237,13 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Toast.makeText(RegisterActivity.this, "Hubo un error al conectarse con el servidor",
+                        Toast.LENGTH_LONG).show();
                 error.printStackTrace();
             }
         });
         addqueue.add(addrequest);
     }
-
-
 
     public void iniciarfb(View v){
         LoginManager.getInstance().logInWithReadPermissions(RegisterActivity.this, Arrays.asList("public_profile"));
@@ -251,12 +253,6 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(intent, SIGN_IN_CODE);
     }
-
-
-
-
-
-
 
     public void registro(View v) throws JSONException {
         boolean correctinput=true;
@@ -306,7 +302,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         }
 
         if (correctinput){
-            message = "Input Válido y Completo!";
+            message = "Input Válido y Completo";
             addUser(name.getText().toString(), email.getText().toString(),pswd.getText().toString(), phone.getText().toString());
         } else message = "Input Inválido o Incompleto!";
 

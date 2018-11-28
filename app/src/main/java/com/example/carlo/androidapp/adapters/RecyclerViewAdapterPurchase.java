@@ -15,19 +15,23 @@ import android.widget.TextView;
 import com.example.carlo.androidapp.R;
 import com.example.carlo.androidapp.actividades.showTicketActivity;
 import com.example.carlo.androidapp.modelos.Purchase;
+import com.example.carlo.androidapp.modelos.Tour;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class RecyclerViewAdapterPurchase extends RecyclerView.Adapter<RecyclerViewAdapterPurchase.ViewHolder>{
+
+    private Tour tour;
     private ArrayList<Purchase> purchases;
     private Context mcontext;
     private Intent mintent;
 
-    public RecyclerViewAdapterPurchase(ArrayList<Purchase> purchases, Context mcontext) {
+    public RecyclerViewAdapterPurchase(ArrayList<Purchase> purchases, Context mcontext, Tour tour) {
         this.purchases = purchases;
         this.mcontext = mcontext;
+        this.tour = tour;
         mintent = new Intent(mcontext,showTicketActivity.class);
     }
 
@@ -52,8 +56,11 @@ public class RecyclerViewAdapterPurchase extends RecyclerView.Adapter<RecyclerVi
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
+                Bundle bundleTour = new Bundle();
+                bundleTour.putSerializable("tour", tour);
                 bundle.putSerializable("purchase", purchases.get(i));
                 mintent.putExtras(bundle);
+                mintent.putExtras(bundleTour);
                 mcontext.startActivity(mintent);
             }
         });

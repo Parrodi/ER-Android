@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -80,12 +80,11 @@ public class pay_showticket extends AppCompatActivity {
         layouttypes = (LinearLayout)findViewById(R.id.ticketTypes);
         layoutprices = (LinearLayout)findViewById(R.id.ticketPrices);
         thistotal =(TextView)findViewById(R.id.totalAmount);
-        accesstoken = prf.getString("token", null);;
+        accesstoken = prf.getString("token", null);
         tourid=mintent.getIntExtra("tour_id",0);
         userid = prf.getInt("userid",0);
         unixtimestamp = mintent.getLongExtra("dateselected",0);
         datasize = mintent.getIntExtra("datasize",0);
-        Log.d(TAG, "date: " + unixtimestamp);
         Date date = new java.util.Date(unixtimestamp*1000L);
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
         String formattedDate = sdf.format(date);
@@ -97,7 +96,6 @@ public class pay_showticket extends AppCompatActivity {
     private void getPrices(){
         RequestQueue mQueue = Volley.newRequestQueue(this);
         String urlprices = "http://er-citytourister.appspot.com/Price?tour_id="+tourid;
-        Log.d(TAG, "getPrices: "+tourid);
 
         final JsonArrayRequest requestPrices = new JsonArrayRequest(Request.Method.GET, urlprices, null, new Response.Listener<JSONArray>() {
             @Override
@@ -113,11 +111,10 @@ public class pay_showticket extends AppCompatActivity {
                             priceidlist.add(price.getInt("id"));
                         }
 
-
-
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Log.d(TAG, "onResponse: No se pudo primerjson");
+                        Toast.makeText(pay_showticket.this, "Hubo un problema al obtener información del servidor",
+                                Toast.LENGTH_LONG).show();
                     }
 
                 }
@@ -127,6 +124,8 @@ public class pay_showticket extends AppCompatActivity {
                     String tourname = mtour.getString("name");
                     mtourname.setText(tourname);
                 } catch (JSONException e) {
+                    Toast.makeText(pay_showticket.this, "Hubo un problema al obtener información del servidor",
+                            Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
 
@@ -135,8 +134,9 @@ public class pay_showticket extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Toast.makeText(pay_showticket.this, "Hubo un problema al conectarse con el servidor",
+                        Toast.LENGTH_LONG).show();
                 error.printStackTrace();
-                Log.d(TAG, "onErrorResponse: failed second json");
             }
         }){
             @Override
@@ -156,22 +156,23 @@ public class pay_showticket extends AppCompatActivity {
 
     private void createTextviews(String name, Double price){
         int mcount = count.get(types.indexOf(name));
-        String tickettype = name + " X" + mcount;
-        TextView type = new TextView(this);
-        TextView cost = new TextView(this);
-        price=price*mcount;
-        temptotal += price;
-        String mprice = price.toString();
-        type.setText(tickettype);
-        cost.setText(mprice);
-        type.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        cost.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
-        layouttypes.addView(type);
-        layoutprices.addView(cost);
-        Log.d(TAG, "createTextviews: "+temptotal);
-        thistotal.setText(String.valueOf(temptotal));
+        if(mcount>0) {
+            String tickettype = name + " X" + mcount;
+            TextView type = new TextView(this);
+            TextView cost = new TextView(this);
+            price = price * mcount;
+            temptotal += price;
+            String mprice = price.toString();
+            type.setText(tickettype);
+            cost.setText(mprice);
+            type.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
+            cost.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
+            layouttypes.addView(type);
+            layoutprices.addView(cost);
+            thistotal.setText(String.valueOf(temptotal));
+        }
     }
 
     private void createPurchase() throws JSONException {
@@ -188,7 +189,6 @@ public class pay_showticket extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 try {
                     int id = response.getInt("id");
-                    Log.d(TAG, "onResponse: SE CREO PRUCHASE!");
                     int counter =0;
                     for(int i=0; i<count.size(); i++){
                         for(int j=0; j<count.get(i); j++){
@@ -198,14 +198,22 @@ public class pay_showticket extends AppCompatActivity {
                             createTickets(id,name,priceid);
                         }
                     }
+                    Toast.makeText(pay_showticket.this, "Se creó tu compra con éxito!",
+                            Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(pay_showticket.this, MapsActivity.class);
+                    startActivity(i);
 
                 } catch (JSONException e) {
+                    Toast.makeText(pay_showticket.this, "Hubo un problema al obtener información del servidor",
+                            Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Toast.makeText(pay_showticket.this, "Hubo un problema al conectarse con el servidor",
+                        Toast.LENGTH_LONG).show();
 
             }
         }){
@@ -222,7 +230,6 @@ public class pay_showticket extends AppCompatActivity {
     }
 
     private void createTickets(int id, String name, int priceid) throws JSONException {
-        Log.d(TAG, "ID de purchase: "+id);
         String url = "https://er-citytourister.appspot.com/ticket/add";
         RequestQueue ticketrequest = Volley.newRequestQueue(this);
         JSONObject postparams = new JSONObject();
@@ -230,18 +237,18 @@ public class pay_showticket extends AppCompatActivity {
         postparams.put("name", name);
         postparams.put("price_id", priceid);
         postparams.put("qr_code", "12345678910");
-        Log.d(TAG, "params" + postparams);
 
 
         JsonObjectRequest createTicket = new JsonObjectRequest(Request.Method.POST, url, postparams, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.d(TAG, "onResponse: SELOGROTICKET!");
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Toast.makeText(pay_showticket.this, "Hubo un problema al conectarse con el servidor",
+                        Toast.LENGTH_LONG).show();
             }
         }){
             @Override

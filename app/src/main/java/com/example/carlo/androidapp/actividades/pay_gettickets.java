@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -60,11 +61,10 @@ public class pay_gettickets extends AppCompatActivity {
     }
 
     private void getVariables(){
-        Log.d(TAG, "Entered getVaraiables");
         RequestQueue mQueue = Volley.newRequestQueue(this);
         String url = "http://er-citytourister.appspot.com/Price?tour_id="+tourid;
 
-        final JsonArrayRequest requestPrices = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+        JsonArrayRequest requestPrices = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 for (int i = 0; i < response.length(); i++) {
@@ -75,11 +75,11 @@ public class pay_gettickets extends AppCompatActivity {
                         mTicketTypes.add(name);
                         Double mprice = price.getDouble("priceAmount");
                         mTicketPrices.add(mprice);
-                        Log.d(TAG, "JsonParams: " + name + mprice);
 
                     } catch (JSONException e) {
+                        Toast.makeText(pay_gettickets.this, "Hubo un error al obtener información del sistema",
+                                Toast.LENGTH_LONG).show();
                         e.printStackTrace();
-                        Log.d(TAG, "failed to get parameters json");
                     }
 
                 }
@@ -88,8 +88,9 @@ public class pay_gettickets extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Toast.makeText(pay_gettickets.this, "Hubo un error al conectarse al servidor",
+                        Toast.LENGTH_LONG).show();
                 error.printStackTrace();
-                Log.d(TAG, "onErrorResponse: failed second json");
             }
         }){
             @Override

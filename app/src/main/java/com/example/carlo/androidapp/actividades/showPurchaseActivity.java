@@ -66,7 +66,7 @@ public class showPurchaseActivity extends AppCompatActivity {
                         startActivity(i);
                         break;
                     case R.id.salidas :
-                        Intent intent = new Intent(showPurchaseActivity.this, UserMapActivity.class);
+                        Intent intent = new Intent(showPurchaseActivity.this, TimeIntervaleActivity.class);
                         Bundle bundle2 = new Bundle();
                         bundle2.putSerializable("tour", (Tour) getIntent().getExtras().getSerializable("tour"));
                         intent.putExtras(bundle2);
@@ -168,7 +168,7 @@ public class showPurchaseActivity extends AppCompatActivity {
 
     private void initRecyclerView(){
         RecyclerView recyclerView = findViewById(R.id.recyclerviewpurchases);
-        final RecyclerViewAdapterPurchase adapter = new RecyclerViewAdapterPurchase(purchases,this);
+        final RecyclerViewAdapterPurchase adapter = new RecyclerViewAdapterPurchase(purchases,this, (Tour) getIntent().getExtras().getSerializable("tour"));
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
