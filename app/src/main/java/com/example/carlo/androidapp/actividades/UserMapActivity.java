@@ -43,7 +43,7 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
 
-    private static final float DEFAULT_ZOOM = 10f;
+    private static final float DEFAULT_ZOOM = 13f;
 
     //vars
     private Boolean mLocationPermissionGranted = true;

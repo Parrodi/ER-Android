@@ -57,11 +57,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     //permisos
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
 
     SharedPreferences prf;
 
-    private static final float DEFAULT_ZOOM = 10f;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
+
+    private static final float DEFAULT_ZOOM = 13f;
 
     private static String accesstoken;
 
@@ -95,6 +96,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
@@ -372,7 +374,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Place place[] = tour.getPlaces();
         j = i;
         for (Place p : place) {
-            makeMarker(new LatLng(p.getLatitude(), p.getLongitude()), tour.getDescription(), p.getPlaceTypeId());
+            makeMarker(new LatLng(p.getLatitude(), p.getLongitude()), p.getName(), p.getPlaceTypeId());
         }
         moveCamera(new LatLng(place[0].getLatitude(), place[0].getLongitude()), DEFAULT_ZOOM);
     }

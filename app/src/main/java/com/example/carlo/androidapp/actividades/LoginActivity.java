@@ -49,6 +49,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     Intent mintent;
     SharedPreferences pref;
 
+    //Se encarga de cerrar la aplicación cuando esté en el login
     @Override
     public void onBackPressed() {
         Intent a = new Intent(Intent.ACTION_MAIN);
@@ -133,6 +134,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .build();
     }
 
+    //Request de inicio de sesión normal
     public void basicLogin(final String email, String password) throws JSONException {
         final boolean testResponse = false, finishedRequest=false;
         final RequestQueue loginqueue = Volley.newRequestQueue(this);
@@ -180,6 +182,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         loginqueue.add(loginrequest);
     }
 
+    //Request para agregar con redes sociales, se llama este primero para verificar si ya está en uso el email, en caso de estarlo, se manda llamar el inicio de sesión normal
     public void addUserSocialNetworks(String name, final String email, final String password) throws JSONException {
         RequestQueue addqueue = Volley.newRequestQueue(this);
         String url = "https://er-citytourister.appspot.com/user/add";
@@ -247,7 +250,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     }
 
-    //Manages the result of the Google connection
+    //Se encarga del resultado de inicio de sesión con Google
     private void handleSignInResult(GoogleSignInResult result) {
         if(result.isSuccess()){
             //GoogleSignInAccount acct = result.getSignInAccount();
@@ -264,23 +267,24 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 Toast.LENGTH_LONG).show();
     }
 
+    //Método de error para Google
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(LoginActivity.this, "Falló la conexión con Google",
                 Toast.LENGTH_LONG).show();
     }
 
-    //Calls the method to begin a connection with FB
+    //Se llama el inicio de sesión con Facebook
     public void fbLogin(View v){
         LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile"));
     }
-
+    //Se llama el inicio de sesión con Google
     public void gLogin(View v){
         Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(intent, SIGN_IN_CODE);
 
     }
-    //Calls the method BasicLoginManager
+    //Se llama al request de login básico
     public void doBasicLogin(View v) throws JSONException {
         basicLogin(em.getText().toString(), psw.getText().toString());
 

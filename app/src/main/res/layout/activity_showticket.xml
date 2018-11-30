@@ -10,7 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/botomNavigation"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/boleto">
+        android:background="@drawable/boleto"
+        android:layout_marginBottom="40dp">
 
         <TextView
             android:id="@+id/Tour"
