@@ -1,3 +1,4 @@
+/*Actividad encargada de inicializar el mapa y desplegar carrusel con información de cada tour*/
 package com.example.carlo.androidapp.actividades;
 
 import android.Manifest;
@@ -53,13 +54,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public static final String TAG = "MapActivity";
 
+    //permisos
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
 
     SharedPreferences prf;
-
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
 
     private static final float DEFAULT_ZOOM = 10f;
 
@@ -83,6 +83,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     ViewPager viewPager;
 
+    /*Método para evitar que el usuario regresa a LoginActivity*/
     @Override
     public void onBackPressed() {
         Intent a = new Intent(Intent.ACTION_MAIN);
@@ -94,19 +95,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        /*Inicialización de herramientas*/
         listaDeTours = new ArrayList<>();
         listaDePlaces = new ArrayList<>();
         listaDeDates = new ArrayList<>();
         prf = getSharedPreferences("user_details",MODE_PRIVATE);
         accesstoken = prf.getString("token", null);
+
+        /*Llamada al método para conseguir permisos*/
         getLocationPermission();
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
+        /*Llamada al método que hará el request a la base de datos*/
         sendRequest();
 
+        /*Configuración de navegación con la barra inferior*/
         BottomNavigationView menu = (BottomNavigationView) findViewById(R.id.botomNavigation);
         menu.setSelectedItemId(R.id.tours);
         menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -159,7 +165,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * installed Google Play services and returned to the app.
      */
 
+    /*Método para obtener ubicación del usuario*/
     private void getDeviceLocation() {
+        /*Uso de FusedLocationProviderClient para la obtención de la ubicación*/
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         try {
@@ -171,6 +179,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         if (task.isSuccessful()) {
                             Log.d(TAG, "onComplete: found location!");
                             Location currentLocation = (Location) task.getResult();
+                            /*El mapa se centra en el centro de Puebla*/
                             moveCamera(new LatLng(19.0429, -98.198508), DEFAULT_ZOOM);
                         } else {
                             Log.d(TAG, "onComplete: current location is null");
@@ -183,24 +192,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
         }
     }
-
+    /*Método para mover la cámara a una ubicación específica, con un zoom determinado*/
     private void moveCamera(LatLng latLng, float zoom) {
         Log.d(TAG, "moveCamera: moving the camera to: lat " + latLng.latitude + ", lng: " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
-
+    /*Inicialización asincrona del mapa*/
     private void initMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(MapsActivity.this);
     }
 
+    /*Métodos para checar los permisos de coneccióna internet y ubicación de usuario*/
     private void getLocationPermission() {
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(), FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             if (ContextCompat.checkSelfPermission(this.getApplicationContext(), COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mLocationPermissionGranted = true;
+                /*Si hay permisos, inicializar el mapa*/
                 initMap();
             } else {
                 ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
@@ -230,39 +241,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    /*Método para inicializar mapa*/
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        /*Inicialización de objeto Google Map*/
         mMap = googleMap;
 
+        /*Chequeo de permisos*/
         if (mLocationPermissionGranted) {
+            /*Método para obtener ubicación del usuario*/
             getDeviceLocation();
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
+            /*Activación de detalles de interfaz, activar ubicación, botón de reubicación*/
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
         }
     }
 
+    /*Método para conseguir datos de la base*/
     private void sendRequest() {
+        /*Request Queue necesaria para hacer request con Volley*/
         mRequestQueue = Volley.newRequestQueue(this);
 
+        /*Request de arreglos de JSON, se define el url de los tours*/
         JsonArrayRequest requestLocation = new JsonArrayRequest(url + PATH_TO_TOURS, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
 
                 JSONObject jsonObject;
-
+                /*Se procesa cada uno de los elementos del arreglo de JSON de tours, guardando toda la información en un
+                * arraylist de tours*/
                 for (int i = 0; i < response.length(); i++) {
 
                     try {
                         jsonObject = response.getJSONObject(i);
                         String url = jsonObject.getString("image");
 
+                        /*Se jala otro arreglo de JSON de places por cada tour y se guardan*/
                         JSONArray jsonArrayPlace = jsonObject.getJSONArray("places");
                         for (int j = 0; j < jsonArrayPlace.length(); j++) {
-                            Log.d(TAG, "Si lo hace :V");
                             JSONObject jsonObjectPlaces = jsonArrayPlace.getJSONObject(j);
 
                             String name = jsonObjectPlaces.getString("name");
@@ -279,6 +299,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                         }
 
+                        /*Se jala otro arreglo de JSON de date information y se guarda*/
                         JSONArray jsonArrayDateInfo = jsonObject.getJSONArray("dateinformations");
                         for(int k = 0; k < jsonArrayDateInfo.length(); k++){
                             JSONObject jsonObjectDateInfo = jsonArrayDateInfo.getJSONObject(k);
@@ -323,9 +344,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
-                // Basic Authentication
-                //String auth = "Basic " + Base64.encodeToString(CONSUMER_KEY_AND_SECRET.getBytes(), Base64.NO_WRAP);
-
                 headers.put("auth", accesstoken);
                 return headers;
             }
@@ -336,6 +354,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         viewPager.addOnPageChangeListener(this);
     }
 
+    /*Método para configurar el ViewPager utilizado apra el carrusel*/
     private void setupViewPager(List<Tour> listaDeTours) {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(MapsActivity.this, listaDeTours);
         viewPager.setAdapter(viewPagerAdapter);
@@ -345,7 +364,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onPageScrolled(int i, float v, int i1) {
 
     }
-
+    /*Método para que al cambiar de imagen en el carrusel se cambian los puntos desplegados sobre el mapa*/
     @Override
     public void onPageSelected(int i) {
         mMap.clear();

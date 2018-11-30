@@ -1,3 +1,4 @@
+/*Actividad encargada de desplegar información de cada tour y dar acceso al botón de compra*/
 package com.example.carlo.androidapp.actividades;
 
 import android.content.Intent;
@@ -24,6 +25,7 @@ public class TourDescriptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tour_description);
 
+        /*Obtención del tour por medio de Intents*/
         final Tour tour = (Tour)Objects.requireNonNull(getIntent().getExtras()).getSerializable("tour");
 
         String name = tour.getName();
@@ -36,12 +38,10 @@ public class TourDescriptionActivity extends AppCompatActivity {
         TextView nombre_tour = (TextView) findViewById(R.id.nombre_tour);
         Button botonCompra = (Button)findViewById(R.id.botonCompra);
 
-
-
         descripcion_tour.setText(description);
         nombre_tour.setText(name);
         Picasso.with(this).load(image_url).into(image_tour);
-
+        /*Botón para dirijir a la compra*/
         botonCompra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,6 +51,7 @@ public class TourDescriptionActivity extends AppCompatActivity {
             }
         });
 
+        /*Configuración de navegación con la barra inferior*/
         BottomNavigationView menu = (BottomNavigationView) findViewById(R.id.botomNavigation);
 
         menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

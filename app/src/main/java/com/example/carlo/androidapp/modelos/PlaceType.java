@@ -1,3 +1,4 @@
+/*Objeto basado en la tabla de la API PlaceType*/
 package com.example.carlo.androidapp.modelos;
 
 public class PlaceType {

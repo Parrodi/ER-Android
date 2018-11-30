@@ -1,3 +1,4 @@
+/*Actividad para desplegar las pantallas de ayuda*/
 package com.example.carlo.androidapp.actividades;
 
 import android.content.Intent;

@@ -1,3 +1,5 @@
+/*Actividad encargada de configurar el mapa dinde el usuario puede ver los puntos de interés,
+ recomendaciones y paradas*/
 package com.example.carlo.androidapp.actividades;
 
 import android.Manifest;
@@ -36,10 +38,9 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
 
     public static final String TAG = "UserMapActivity";
 
+    //permisos
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
 
     private static final float DEFAULT_ZOOM = 10f;
@@ -62,23 +63,34 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
 
         tour = (Tour)getIntent().getExtras().getSerializable("tour");
 
+        /*Inicialización de widgets*/
         puntosDeInteres = (Button)findViewById(R.id.buttonPI);
         final Button parada = (Button)findViewById(R.id.buttonParada);
         final Button recomendacion = (Button) findViewById(R.id.buttonRec);
 
+        /*Configuración de los Listeners de cada botón (Mismo proceso)*/
+
         puntosDeInteres.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*Se limpia el mapa*/
                 mMap.clear();
+
+                /*Si es la primera vez que se selecciona el boton, la cámara de centra en el primer punto de interés
+                * de la lista*/
                 if(!camaraMove){
                     Place places[] = tour.getPlaces();
                     Place p = places[0];
                     moveCamera(new LatLng(p.getLatitude(), p.getLongitude()), DEFAULT_ZOOM);
                     camaraMove = true;
                 }
+
+                /*Cambio de color del boton y de los otros dos botones*/
                 puntosDeInteres.setBackground(getDrawable(R.drawable.presspuntointeresbtn));
                 parada.setBackground(getDrawable(R.drawable.paradasbtn));
                 recomendacion.setBackground(getDrawable(R.drawable.recomendacionesbtn));
+
+                /*Colocación de los marcadores*/
                 for(Place p : tour.getPlaces()){
                     if(p.getPlaceTypeId() == 1) {
                         LatLng location = new LatLng(p.getLatitude(), p.getLongitude());
@@ -123,6 +135,8 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
                 }
             }
         });
+
+        /*Configuración de navegación con la barra inferior*/
 
         BottomNavigationView menu = (BottomNavigationView) findViewById(R.id.botomNavigation);
         menu.setSelectedItemId(R.id.mapa);
@@ -173,16 +187,21 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
      * installed Google Play services and returned to the app.
      */
 
+    /*Método para inicializar mapa*/
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        /*Inicialización de objeto Google Map*/
         mMap = googleMap;
 
+        /*Chequeo de permisos*/
         if (mLocationPermissionGranted) {
+            /*Método para obtener ubicación del usuario*/
             getDeviceLocation();
 
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
+            /*Activación de detalles de interfaz, activar ubicación, botón de reubicación y Listener para los marcadores*/
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
@@ -190,12 +209,14 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
         }
     }
 
+    /*Métodos para checar los permisos de coneccióna internet y ubicación de usuario*/
     private void getLocationPermission() {
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(), FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             if (ContextCompat.checkSelfPermission(this.getApplicationContext(), COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mLocationPermissionGranted = true;
+                /*Si hay permisos, inicializar el mapa*/
                 initMap();
             } else {
                 ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
@@ -204,8 +225,9 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
             ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
         }
     }
-
+    /*Método para obtener ubicación del usuario*/
     private void getDeviceLocation() {
+        /*Uso de FusedLocationProviderClient para la obtención de la ubicación*/
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         try {
@@ -217,9 +239,9 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
                         if (task.isSuccessful()) {
                             Log.d(TAG, "onComplete: found location!");
                             Location currentLocation = (Location) task.getResult();
+                            /*El mapa se centra en el centro de Puebla*/
                             moveCamera(new LatLng(19.0429, -98.198508), DEFAULT_ZOOM);
                         } else {
-                            Log.d(TAG, "onComplete: current location is null");
                             Toast.makeText(UserMapActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -229,25 +251,29 @@ public class UserMapActivity extends FragmentActivity implements OnMapReadyCallb
             Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
         }
     }
-
+    /*Método para mover la cámara a una ubicación específica, con un zoom determinado*/
     private void moveCamera(LatLng latLng, float zoom) {
         Log.d(TAG, "moveCamera: moving the camera to: lat " + latLng.latitude + ", lng: " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 
+    /*Inicialización asincrona del mapa*/
     private void initMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(UserMapActivity.this);
     }
 
-
+    /*Listener de los marcadores, para que muestren información relevante de lugares*/
     @Override
     public boolean onMarkerClick(Marker marker) {
+
         LatLng markerLocation = marker.getPosition();
+
         for(Place p : tour.getPlaces()){
             LatLng placeLocation = new LatLng(p.getLatitude(), p.getLongitude());
             if(markerLocation.equals(placeLocation)) {
+                /*Intent para sacar el pop up del lugar y redirigir al usuario a PlacePopUpActivity*/
                 Intent i = new Intent(UserMapActivity.this, PlacePopActivity.class);
                 Bundle bundle = new Bundle();
                 Bundle bundle2 = new Bundle();
