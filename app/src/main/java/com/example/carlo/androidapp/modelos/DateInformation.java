@@ -1,3 +1,4 @@
+/*Objeto basado en la tabla de la API DateInformation*/
 package com.example.carlo.androidapp.modelos;
 
 import java.io.Serializable;

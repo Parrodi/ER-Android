@@ -1,3 +1,5 @@
+/*Actividad encargada de cargar y desplegar los intervalos de tiempos y frecuencias de camiones
+* para cada tour*/
 package com.example.carlo.androidapp.actividades;
 
 import android.annotation.SuppressLint;
@@ -40,8 +42,9 @@ public class TimeIntervaleActivity extends AppCompatActivity {
 
     public static final String TAG = "TimeIntervalActivity";
 
-    private static String accesstoken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE5IiwiZW1haWwiOiJkQGdtYWkuY29tYyIsInR5cGUiOiJVc2VyIiwiaWF0IjoxNTQyOTIzNDYzfQ.L8bgLtBeJx3EtdZYhLq16obFxRnqtLfrJ8T0WyqtNWc";
+    private static String accesstoken;
 
+    /*Request*/
     private RequestQueue mRequestQueue;
     String url = "https://er-citytourister.appspot.com/";
     String PATH_TO_DATE_INTERVAL = "dateinterval";
@@ -66,11 +69,11 @@ public class TimeIntervaleActivity extends AppCompatActivity {
         dateIntervals = new ArrayList<>();
         dateInformations = new ArrayList<>();
 
+        /*Obtención del token para realizar request*/
         prf = getSharedPreferences("user_details",MODE_PRIVATE);
         accesstoken = prf.getString("token", null);
 
         tour = (Tour) getIntent().getExtras().getSerializable("tour");
-
 
         dates = tour.getDateInformations();
 
@@ -80,6 +83,7 @@ public class TimeIntervaleActivity extends AppCompatActivity {
 
         sendRequest(dates);
 
+        /*Configuración de navegación con la barra inferior*/
         BottomNavigationView menu = (BottomNavigationView) findViewById(R.id.botomNavigation);
         menu.setSelectedItemId(R.id.salidas);
         menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -120,11 +124,12 @@ public class TimeIntervaleActivity extends AppCompatActivity {
         });
 
     }
-
+    /*Request a unas tablas cruzadas en dos métodos*/
     private void sendRequest(final DateInformation[] date) {
-
+        /*Request Queue necesaria para Volely*/
         mRequestQueue = Volley.newRequestQueue(this);
 
+        /*Request del array de JSON de date information del tour*/
         JsonArrayRequest request = new JsonArrayRequest( url + PATH_TO_DATE_INTERVAL, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -135,8 +140,10 @@ public class TimeIntervaleActivity extends AppCompatActivity {
 
                     try {
                         jsonObject = response.getJSONObject(i);
+                        /*Por cada DateInformation en date, si el día de hoy está entre entre la end_date y la start_date se despliega
+                        * la fecha de hoy en la información de salidas*/
                         for (DateInformation aDate : date) {
-
+                            /*Si el dateIntervale tiene el mismo id que el dateInformation se guarda*/
                             if (jsonObject.getInt("id") == aDate.getDateId()) {
                                 String startDate = jsonObject.getString("start_date");
                                 String endDate = jsonObject.getString("end_date");
@@ -188,9 +195,8 @@ public class TimeIntervaleActivity extends AppCompatActivity {
         mRequestQueue.add(request);
         sendNextRequest();
     }
-
+    /*Segundo request de tabla cruzada*/
     private void sendNextRequest(){
-        Log.d(TAG, "What");
         mRequestQueue = Volley.newRequestQueue(this);
 
         JsonArrayRequest request = new JsonArrayRequest( url + PATH_TO_HOUR_INTERVAL, new Response.Listener<JSONArray>() {
@@ -203,6 +209,8 @@ public class TimeIntervaleActivity extends AppCompatActivity {
                     try {
                         jsonObject = response.getJSONObject(i);
                         for(DateInformation di: dateInformations) {
+                            /*Si el hout interval coincide con el dateInfromation id se hace el request y se procesa el formato
+                            * de UNIX Time*/
                             if (jsonObject.getInt("id") == di.getHourId()) {
                                 long startTime = jsonObject.getLong("start_time");
                                 long endTime = jsonObject.getLong("end_time");
@@ -257,6 +265,7 @@ public class TimeIntervaleActivity extends AppCompatActivity {
         mRequestQueue.add(request);
     }
 
+    /*Método para determinar si el día de hoy está entre la start_date y la end_date*/
     private boolean checkDay(long starDate, long endDate){
         long epoch = System.currentTimeMillis()/1000;
         return epoch > starDate && epoch < endDate;

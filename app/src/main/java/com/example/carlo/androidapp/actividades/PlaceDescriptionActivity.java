@@ -1,3 +1,4 @@
+/*Actividad encargada de desplegar información de cada lugar*/
 package com.example.carlo.androidapp.actividades;
 
 import android.content.Intent;
@@ -26,9 +27,11 @@ public class PlaceDescriptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_description);
 
+        /*Se obtiene el lugar y el tour de los Intents*/
         place = (Place) getIntent().getExtras().getSerializable("place");
         tour = (Tour)Objects.requireNonNull(getIntent().getExtras()).getSerializable("tour");
 
+        /*Inicializaciónd e los widgets*/
         TextView placeName = (TextView)findViewById(R.id.namePlace);
         TextView placeDescription = (TextView)findViewById(R.id.placeDescription);
         ImageView placeImage =(ImageView)findViewById(R.id.placeImage);
@@ -36,10 +39,12 @@ public class PlaceDescriptionActivity extends AppCompatActivity {
         placeName.setText(place.getName());
         placeDescription.setText(place.getDescription());
 
+        /*Uso de Picasso para cargar una imagen de un URL*/
         if(place.getImageUrl() != null) {
             Picasso.with(this).load(place.getImageUrl()).into(placeImage);
         }
 
+        /*Configuración de navegación con la barra inferior*/
         BottomNavigationView menu = (BottomNavigationView) findViewById(R.id.botomNavigation);
         menu.setSelectedItemId(R.id.mapa);
         menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

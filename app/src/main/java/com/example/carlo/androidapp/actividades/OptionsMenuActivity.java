@@ -1,3 +1,4 @@
+/*Actividad encargada de operar el menú de optiones*/
 package com.example.carlo.androidapp.actividades;
 
 import android.app.Activity;
@@ -26,7 +27,7 @@ public class OptionsMenuActivity extends Activity {
         setContentView(R.layout.activity_options_menu);
 
         prf = getSharedPreferences("user_details",MODE_PRIVATE);
-
+        /*Listener para llevar al usuario a HelpActivity*/
         RelativeLayout rl = (RelativeLayout)findViewById(R.id.ayuda);
         rl.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,7 +36,7 @@ public class OptionsMenuActivity extends Activity {
                 startActivity(i);
             }
         });
-
+        /*Listener para cerrar sesión*/
         RelativeLayout rl2 = (RelativeLayout)findViewById(R.id.logOut);
         rl2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +49,8 @@ public class OptionsMenuActivity extends Activity {
             }
         });
 
+        /*EL menú de opciones funciona como un PopUp
+        * Se usa DisplayMetrics para cargar y deplegar el popUp*/
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
@@ -61,6 +64,7 @@ public class OptionsMenuActivity extends Activity {
 
         getWindow().setAttributes(params);
 
+        /*Configuración de navegación con la barra inferior*/
         BottomNavigationView menu = (BottomNavigationView) findViewById(R.id.botomNavigation);
         menu.setSelectedItemId(R.id.menus);
         menu.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
